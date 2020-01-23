@@ -26,7 +26,13 @@
             ],
             "properties": {
                 "name": "[parameters('webappname')]",
-                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('webappserviceplanname'))]"
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('webappserviceplanname'))]",
+                "siteConfig": {
+                    "appSettings": [],
+                    "linuxFxVersion": "JAVA|8-jre8",
+                    "alwaysOn": true
+                },
+                "clientAffinityEnabled": false
             }
         },
         {
