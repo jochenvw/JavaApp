@@ -29,7 +29,7 @@ stages:
       inputs:
         SourceFolder: '$(System.DefaultWorkingDirectory)'
         Contents: |
-          **/jvw*.jar
+          **/app.jar
         TargetFolder: '$(Build.ArtifactStagingDirectory)/app'
         flattenFolders: true
 
