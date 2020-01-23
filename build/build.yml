@@ -27,8 +27,7 @@ stages:
       inputs:
         SourceFolder: '$(System.DefaultWorkingDirectory)'
         Contents: |
-          **/*.war
-          **/*.jar
+          **/jvw*.jar
         TargetFolder: '$(Build.ArtifactStagingDirectory)/app'
         flattenFolders: true
 
@@ -39,7 +38,12 @@ stages:
         TargetFolder: '$(build.artifactstagingdirectory)/infra'
 
     - task: PublishBuildArtifacts@1
-      displayName: 'Publish Artifacts: drop'
+      displayName: 'Publish Artifact to Azure DevOps'
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'drop'
+        publishLocation: 'Container'
+
 
 - stage: 'CD_DEV'
   displayName: 'Deploy the application to the DEV environment '
@@ -53,6 +57,13 @@ stages:
   jobs:
   - job:
     steps:
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        buildType: 'current'
+        artifactName: 'drop'
+        downloadType: 'single'
+        downloadPath: '$(System.ArtifactsDirectory)'
+
     - task: AzureResourceManagerTemplateDeployment@3
       inputs:
         deploymentScope: 'Resource Group'
@@ -62,8 +73,8 @@ stages:
         resourceGroupName: '$(resourcegroupname)'
         location: 'westeurope'
         templateLocation: 'Linked artifact'
-        csmFile: '$(build.artifactstagingdirectory)/infra/$(armtemplatefile)'
-        csmParametersFile: '$(build.artifactstagingdirectory)/infra/$(armtemplateparams)'
+        csmFile: '$(System.ArtifactsDirectory)/infra/$(armtemplatefile)'
+        csmParametersFile: '$(System.ArtifactsDirectory)/infra/$(armtemplateparams)'
         deploymentMode: 'Incremental'
         deploymentOutputs: 'resource_outputs'
 
