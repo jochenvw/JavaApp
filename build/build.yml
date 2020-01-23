@@ -1,8 +1,3 @@
-# Maven
-# Build your Java project and run tests with Apache Maven.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/java
-
 trigger:
 - master
 
@@ -10,64 +5,83 @@ pool:
   vmImage: 'ubuntu-latest'
   demands: maven
 
-steps:
-- task: Maven@3
-  inputs:
-    mavenPomFile: '$(System.DefaultWorkingDirectory)/src/app/jvwapp/pom.xml'
-    mavenOptions: '-Xmx3072m'
-    javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.8'
-    jdkArchitectureOption: 'x64'
-    publishJUnitResults: true
-    testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    goals: 'package'
+stages:
+- stage: 'Build'
+  displayName: 'Build and package application'
+  jobs:
+  - job:
+    steps:
+    - task: Maven@3
+      inputs:
+        mavenPomFile: '$(System.DefaultWorkingDirectory)/src/app/jvwapp/pom.xml'
+        mavenOptions: '-Xmx3072m'
+        javaHomeOption: 'JDKVersion'
+        jdkVersionOption: '1.8'
+        jdkArchitectureOption: 'x64'
+        publishJUnitResults: true
+        testResultsFiles: '**/surefire-reports/TEST-*.xml'
+        goals: 'package'
 
-- task: CopyFiles@2
-  displayName: 'Copy File to: $(TargetFolder)'
-  inputs:
-    SourceFolder: '$(System.DefaultWorkingDirectory)'
-    Contents: |
-     **/*.war
-     **/*.jar
-    TargetFolder: '$(Build.ArtifactStagingDirectory)/app'
-    flattenFolders: true
+    - task: CopyFiles@2
+      displayName: 'Copy File to: $(TargetFolder)'
+      inputs:
+        SourceFolder: '$(System.DefaultWorkingDirectory)'
+        Contents: |
+        **/*.war
+        **/*.jar
+        TargetFolder: '$(Build.ArtifactStagingDirectory)/app'
+        flattenFolders: true
 
-- task: CopyFiles@2
-  displayName: 'Copy ARM templates'
-  inputs:
-    SourceFolder: infra
-    TargetFolder: '$(build.artifactstagingdirectory)/infra'
+    - task: CopyFiles@2
+      displayName: 'Copy ARM templates'
+      inputs:
+        SourceFolder: infra
+        TargetFolder: '$(build.artifactstagingdirectory)/infra'
 
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifacts: drop'
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifacts: drop'
 
-- task: AzureResourceManagerTemplateDeployment@3
-  inputs:
-    deploymentScope: 'Resource Group'
-    azureResourceManagerConnection: '$(serviceconnection)'
-    subscriptionId: '$(subscriptionid)'
-    action: 'Create Or Update Resource Group'
-    templateLocation: 'Linked artifact'
-    csmFile: 'template.json'
-    csmParametersFile: 'params.json'
-    deploymentMode: 'Incremental'
-    deploymentOutputs: 'resource_outputs'
+- stage: 'Deploy to DEV'
+  displayName: 'Deploy the application to the DEV environment '
+  variables:
+  - name: 'resourcegroupname'
+    value: 'ms-csu-nl-jvw-javademoapp-dev'
+  - name: 'armtemplatefile'
+    value: 'ms-csu-nl-jvw-javademoapp-dev'
+  - name: 'armtemplateparams'
+    value: 'ms-csu-nl-jvw-javademoapp-dev'
+  jobs:
+  - job:
+    steps:
+    - task: AzureResourceManagerTemplateDeployment@3
+      inputs:
+        deploymentScope: 'Resource Group'
+        azureResourceManagerConnection: '$(serviceconnection)'
+        subscriptionId: '$(subscriptionid)'
+        action: 'Create Or Update Resource Group'
+        resourceGroupName: '$(resourcegroupname)'
+        location: 'westeurope'
+        templateLocation: 'Linked artifact'
+        csmFile: '$(build.artifactstagingdirectory)/infra/$(armtemplatefile)'
+        csmParametersFile: '$(build.artifactstagingdirectory)/infra/$(armtemplateparams)'
+        deploymentMode: 'Incremental'
+        deploymentOutputs: 'resource_outputs'
 
-- task: PowerShell@2
-  inputs:
-    targetType: 'inline'
-    script: |
-      $outputs = ConvertFrom-Json '$(resource_outputs)'
-        foreach ($output in $outputs.PSObject.Properties) {
-          Write-Host "##vso[task.setvariable variable=arm_$($output.Name)]$($output.Value.value)"
-        }
+    - task: PowerShell@2
+      inputs:
+        targetType: 'inline'
+        script: |
+          $outputs = ConvertFrom-Json '$(resource_outputs)'
+            foreach ($output in $outputs.PSObject.Properties) {
+              Write-Host "##vso[task.setvariable variable=arm_$($output.Name)]$($output.Value.value)"
+            }
 
-- task: AzureRmWebAppDeployment@4
-  inputs:
-    ConnectionType: 'AzureRM'
-    azureSubscription: 'Microsoft Azure Internal Consumption(5fcb0d36-846f-4721-86e9-47f6c43494fd)'
-    appType: 'webAppLinux'
-    WebAppName: '$(arm_webappname)'
-    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.jar'
-    RuntimeStack: 'JAVA|8-jre8'
+    - task: AzureRmWebAppDeployment@4
+      inputs:
+        ConnectionType: 'AzureRM'
+        azureSubscription: 'Microsoft Azure Internal Consumption(5fcb0d36-846f-4721-86e9-47f6c43494fd)'
+        appType: 'webAppLinux'
+        WebAppName: '$(arm_webappname)'
+        packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.jar'
+        RuntimeStack: 'JAVA|8-jre8'
 
