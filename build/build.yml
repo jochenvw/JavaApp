@@ -25,7 +25,7 @@ steps:
 - task: CopyFiles@2
   displayName: 'Copy File to: $(TargetFolder)'
   inputs:
-    SourceFolder: '$(Build.DefaultWorkingDirectory)'
+    SourceFolder: '$(System.DefaultWorkingDirectory)'
     Contents: |
      **/*.war
      **/*.jar
