@@ -13,7 +13,7 @@
     },
     "resources": [
         {
-            "name": "parameters('webappname')",
+            "name": "[parameters('webappname')]",
             "type": "Microsoft.Web/sites",
             "apiVersion": "2016-08-01",
             "location": "[resourceGroup().location]",
@@ -22,38 +22,38 @@
                 "displayName": "jvwSampleWebApp"
             },
             "dependsOn": [
-                "[resourceId('Microsoft.Web/serverfarms', 'appServicePlan1')]"
+                "[resourceId('Microsoft.Web/serverfarms', parameters('webappserviceplanname'))]"
             ],
             "properties": {
                 "name": "jvwSampleWebApp",
-                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', 'appServicePlan1')]"
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('webappserviceplanname'))]"
             }
         },
         {
-            "name": "appServicePlan1",
+            "name": "[parameters('webappserviceplanname')]",
             "type": "Microsoft.Web/serverfarms",
             "apiVersion": "2018-02-01",
             "location": "[resourceGroup().location]",
             "sku": {
-                "name": "F1",
+                "name": "P1v2",
                 "capacity": 1
             },
             "tags": {
-                "displayName": "appServicePlan1"
+                "displayName": "[parameters('webappserviceplanname')]"
             },
             "properties": {
-                "name": "appServicePlan1"
+                "name": "[parameters('webappserviceplanname')]"
             }
         }
     ],
     "outputs": {
         "webappname": {
             "type": "string",
-            "value": "parameters('webappname')"
+            "value": "[parameters('webappname')]"
         },
         "webappserviceplanname": {
             "type": "string",
-            "value": "parameters('webappserviceplanname')"
+            "value": "[parameters('webappserviceplanname')]"
         }
     },
     "functions": [
