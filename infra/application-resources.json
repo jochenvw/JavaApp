@@ -13,43 +13,49 @@
     },
     "resources": [
         {
-            "name": "[parameters('webappname')]",
             "type": "Microsoft.Web/sites",
             "apiVersion": "2018-11-01",
+            "name": "[parameters('webappname')]",
             "location": "[resourceGroup().location]",
-            "tags": {
-                "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('webappserviceplanname'))]": "Resource",
-                "displayName": "[parameters('webappname')]"
-            },
             "dependsOn": [
-                "[resourceId('Microsoft.Web/serverfarms', parameters('webappserviceplanname'))]"
+                "[concat('Microsoft.Web/serverfarms/', parameters('webappserviceplanname'))]"
             ],
+            "tags": {
+            },
             "properties": {
                 "name": "[parameters('webappname')]",
-                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('webappserviceplanname'))]",
                 "siteConfig": {
-                    "appSettings": [],
+                    "appSettings": [
+                    ],
                     "linuxFxVersion": "JAVA|8-jre8",
                     "alwaysOn": true
                 },
+                "serverFarmId": "[concat('/subscriptions/', subscription().subscriptionId ,'/resourcegroups/', resourceGroup().name, '/providers/Microsoft.Web/serverfarms/', parameters('webappserviceplanname'))]",
+                "hostingEnvironment": "",
                 "clientAffinityEnabled": false
             }
         },
         {
-            "name": "[parameters('webappserviceplanname')]",
             "type": "Microsoft.Web/serverfarms",
             "apiVersion": "2018-11-01",
+            "name": "[parameters('webappserviceplanname')]",
             "location": "[resourceGroup().location]",
-            "kind": "linux",
-            "sku": {
-                "name": "P1v2",
-                "capacity": 1
-            },
+            "dependsOn": [
+            ],
             "tags": {
-                "displayName": "[parameters('webappserviceplanname')]"
             },
+            "sku": {
+                "Tier": "PremiumV2",
+                "Name": "P1v2"
+            },
+            "kind": "linux",
             "properties": {
-                "name": "[parameters('webappserviceplanname')]"
+                "name": "[parameters('webappserviceplanname')]",
+                "workerSize": "3",
+                "workerSizeId": "3",
+                "numberOfWorkers": "1",
+                "reserved": true,
+                "hostingEnvironment": ""
             }
         }
     ],
