@@ -24,9 +24,6 @@ stages:
         testResultsFiles: '**/surefire-reports/TEST-*.xml'
         goals: 'package'
 
-  - job:
-    displayName: 'Staging app and infra-as-code files'
-    steps:
     - task: CopyFiles@2
       displayName: 'Copying app package to staging folder'
       inputs:
@@ -42,9 +39,6 @@ stages:
         SourceFolder: infra
         TargetFolder: '$(build.artifactstagingdirectory)/infra'
 
-  - job:
-    displayName: 'Publishing staged artifacts'
-    steps:
     - task: PublishBuildArtifacts@1
       displayName: 'Publish Artifact to Azure DevOps'
       inputs:
@@ -73,9 +67,6 @@ stages:
         downloadType: 'single'
         downloadPath: '$(System.ArtifactsDirectory)'
 
-  - job:
-    displayName: 'Deploying infrastructure'
-    steps:
     - task: AzureResourceManagerTemplateDeployment@3
       inputs:
         deploymentScope: 'Resource Group'
@@ -99,9 +90,6 @@ stages:
               Write-Host "##vso[task.setvariable variable=arm_$($output.Name)]$($output.Value.value)"
             }
 
-  - job:
-    displayName: 'Deploying application'
-    steps:
     - task: AzureRmWebAppDeployment@4
       inputs:
         ConnectionType: 'AzureRM'
