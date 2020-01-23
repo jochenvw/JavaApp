@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-DemoApplication<jvwapp>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "com.example.jvwapp.DemoApplication",
+            "projectName": "jvwapp",
+            "args": ""
+        }
+    ]
+}
