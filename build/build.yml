@@ -25,10 +25,10 @@ steps:
 - task: CopyFiles@2
   displayName: 'Copy File to: $(TargetFolder)'
   inputs:
-    SourceFolder: '$(Build.SourcesDirectory)'
+    SourceFolder: '$(Build.DefaultWorkingDirectory)'
     Contents: |
      **/*.war
-     **/*jar-with-dependencies.jar
+     **/*.jar
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
     flattenFolders: true
 
