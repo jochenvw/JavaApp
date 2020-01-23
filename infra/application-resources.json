@@ -38,7 +38,7 @@
         {
             "name": "[parameters('webappserviceplanname')]",
             "type": "Microsoft.Web/serverfarms",
-            "apiVersion": "2018-02-01",
+            "apiVersion": "2018-11-01",
             "location": "[resourceGroup().location]",
             "kind": "linux",
             "sku": {
