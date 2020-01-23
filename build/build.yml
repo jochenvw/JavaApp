@@ -73,8 +73,8 @@ stages:
         resourceGroupName: '$(resourcegroupname)'
         location: 'westeurope'
         templateLocation: 'Linked artifact'
-        csmFile: '$(System.ArtifactsDirectory)/infra/$(armtemplatefile)'
-        csmParametersFile: '$(System.ArtifactsDirectory)/infra/$(armtemplateparams)'
+        csmFile: '$(System.ArtifactsDirectory)/drop/infra/$(armtemplatefile)'
+        csmParametersFile: '$(System.ArtifactsDirectory)/drop/infra/$(armtemplateparams)'
         deploymentMode: 'Incremental'
         deploymentOutputs: 'resource_outputs'
 
