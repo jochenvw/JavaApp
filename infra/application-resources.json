@@ -40,6 +40,7 @@
             "type": "Microsoft.Web/serverfarms",
             "apiVersion": "2018-02-01",
             "location": "[resourceGroup().location]",
+            "kind": "linux",
             "sku": {
                 "name": "P1v2",
                 "capacity": 1
