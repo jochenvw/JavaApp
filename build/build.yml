@@ -35,7 +35,7 @@ steps:
 - task: CopyFiles@2
   displayName: 'Copy ARM templates'
   inputs:
-    SourceFolder: ArmTemplates
+    SourceFolder: infra
     TargetFolder: '$(build.artifactstagingdirectory)'
 
 - task: PublishBuildArtifacts@1
