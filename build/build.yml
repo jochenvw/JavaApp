@@ -10,8 +10,10 @@ stages:
   displayName: 'Build and package application'
   jobs:
   - job:
+    displayName: 'Prepping JAVA API app'
     steps:
     - task: Maven@3
+      displayName: 'Maven package'
       inputs:
         mavenPomFile: '$(System.DefaultWorkingDirectory)/src/app/jvwapp/pom.xml'
         mavenOptions: '-Xmx3072m'
@@ -51,9 +53,9 @@ stages:
   - name: 'resourcegroupname'
     value: 'ms-csu-nl-jvw-javademoapp-dev'
   - name: 'armtemplatefile'
-    value: 'ms-csu-nl-jvw-javademoapp-dev'
+    value: 'application-resources.json'
   - name: 'armtemplateparams'
-    value: 'ms-csu-nl-jvw-javademoapp-dev'
+    value: 'parameters.test.json'
   jobs:
   - job:
     steps:
