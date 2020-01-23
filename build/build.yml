@@ -23,12 +23,12 @@ stages:
         goals: 'package'
 
     - task: CopyFiles@2
-      displayName: 'Copy File to: $(TargetFolder)'
+      displayName: 'Copying app package to staging folder'
       inputs:
         SourceFolder: '$(System.DefaultWorkingDirectory)'
         Contents: |
-        **/*.war
-        **/*.jar
+          **/*.war
+          **/*.jar
         TargetFolder: '$(Build.ArtifactStagingDirectory)/app'
         flattenFolders: true
 
