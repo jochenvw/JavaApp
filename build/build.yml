@@ -29,14 +29,44 @@ steps:
     Contents: |
      **/*.war
      **/*.jar
-    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/app'
     flattenFolders: true
 
 - task: CopyFiles@2
   displayName: 'Copy ARM templates'
   inputs:
     SourceFolder: infra
-    TargetFolder: '$(build.artifactstagingdirectory)'
+    TargetFolder: '$(build.artifactstagingdirectory)/infra'
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifacts: drop'
+
+- task: AzureResourceManagerTemplateDeployment@3
+  inputs:
+  deploymentScope: 'Resource Group'
+  azureResourceManagerConnection: 'Microsoft Azure Internal Consumption(5fcb0d36-846f-4721-86e9-47f6c43494fd)'
+  subscriptionId: '5fcb0d36-846f-4721-86e9-47f6c43494fd'
+  action: 'Create Or Update Resource Group'
+  templateLocation: 'Linked artifact'
+  csmFile: 'template.json'
+  csmParametersFile: 'params.json'
+  deploymentMode: 'Incremental'
+  deploymentOutputs: 'resource_outputs'
+
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      $outputs = ConvertFrom-Json '$(resource_outputs)'
+        foreach ($output in $outputs.PSObject.Properties) {
+          Write-Host "##vso[task.setvariable variable=arm_$($output.Name)]$($output.Value.value)"
+        }
+
+- task: AzureRmWebAppDeployment@4
+  inputs:
+  ConnectionType: 'AzureRM'
+  azureSubscription: 'Microsoft Azure Internal Consumption(5fcb0d36-846f-4721-86e9-47f6c43494fd)'
+  appType: 'webAppLinux'
+  WebAppName: '$(arm_webappname)'
+  packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.jar'
+  RuntimeStack: 'JAVA|8-jre8'

@@ -3,16 +3,17 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "webappname": {
-           "type": "string"
+            "type": "string"
         },
         "webappserviceplanname": {
-           "type": "string"
+            "type": "string"
         }
     },
-    "variables": {},
+    "variables": {
+    },
     "resources": [
         {
-            "name": "jvwSampleWebApp",
+            "name": "parameters('webappname')",
             "type": "Microsoft.Web/sites",
             "apiVersion": "2016-08-01",
             "location": "[resourceGroup().location]",
@@ -45,6 +46,16 @@
             }
         }
     ],
-    "outputs": {},
-    "functions": []
+    "outputs": {
+        "webappname": {
+            "type": "string",
+            "value": "parameters('webappname')"
+        },
+        "webappserviceplanname": {
+            "type": "string",
+            "value": "parameters('webappserviceplanname')"
+        }
+    },
+    "functions": [
+    ]
 }
