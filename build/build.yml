@@ -41,7 +41,7 @@ stages:
     - task: PublishBuildArtifacts@1
       displayName: 'Publish Artifacts: drop'
 
-- stage: 'Deploy to DEV'
+- stage: 'CD_DEV'
   displayName: 'Deploy the application to the DEV environment '
   variables:
   - name: 'resourcegroupname'
