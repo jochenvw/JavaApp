@@ -43,15 +43,15 @@ steps:
 
 - task: AzureResourceManagerTemplateDeployment@3
   inputs:
-  deploymentScope: 'Resource Group'
-  azureResourceManagerConnection: 'Microsoft Azure Internal Consumption(5fcb0d36-846f-4721-86e9-47f6c43494fd)'
-  subscriptionId: '5fcb0d36-846f-4721-86e9-47f6c43494fd'
-  action: 'Create Or Update Resource Group'
-  templateLocation: 'Linked artifact'
-  csmFile: 'template.json'
-  csmParametersFile: 'params.json'
-  deploymentMode: 'Incremental'
-  deploymentOutputs: 'resource_outputs'
+    deploymentScope: 'Resource Group'
+    azureResourceManagerConnection: '$(serviceconnection)'
+    subscriptionId: '$(subscriptionid)'
+    action: 'Create Or Update Resource Group'
+    templateLocation: 'Linked artifact'
+    csmFile: 'template.json'
+    csmParametersFile: 'params.json'
+    deploymentMode: 'Incremental'
+    deploymentOutputs: 'resource_outputs'
 
 - task: PowerShell@2
   inputs:
@@ -64,9 +64,9 @@ steps:
 
 - task: AzureRmWebAppDeployment@4
   inputs:
-  ConnectionType: 'AzureRM'
-  azureSubscription: 'Microsoft Azure Internal Consumption(5fcb0d36-846f-4721-86e9-47f6c43494fd)'
-  appType: 'webAppLinux'
-  WebAppName: '$(arm_webappname)'
-  packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.jar'
-  RuntimeStack: 'JAVA|8-jre8'
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'Microsoft Azure Internal Consumption(5fcb0d36-846f-4721-86e9-47f6c43494fd)'
+    appType: 'webAppLinux'
+    WebAppName: '$(arm_webappname)'
+    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.jar'
+    RuntimeStack: 'JAVA|8-jre8'
