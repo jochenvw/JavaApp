@@ -72,10 +72,4 @@
       </plugin>
     </plugins>
   </build>
-  <appSettings>
-    <property>
-      <name>PORT</name>
-      <value>8080</value>
-    </property>
-  </appSettings>
 </project>
