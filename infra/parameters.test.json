@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "webappname": {
-            "value": "jvwjavawebapptest"
+            "value": "ms-csu-nl-jvw-javademoapp-test"
         },
         "webappserviceplanname": {
-            "value": "jvwjavawebappserviceplantest"
+            "value": "ms-csu-nl-jvw-javademoapp-asp-test"
         }
     }
 }

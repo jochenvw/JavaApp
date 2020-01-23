@@ -18,14 +18,14 @@
             "apiVersion": "2016-08-01",
             "location": "[resourceGroup().location]",
             "tags": {
-                "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/appServicePlan1')]": "Resource",
-                "displayName": "jvwSampleWebApp"
+                "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('webappserviceplanname'))]": "Resource",
+                "displayName": "[parameters('webappname')]"
             },
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms', parameters('webappserviceplanname'))]"
             ],
             "properties": {
-                "name": "jvwSampleWebApp",
+                "name": "[parameters('webappname')]",
                 "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('webappserviceplanname'))]"
             }
         },

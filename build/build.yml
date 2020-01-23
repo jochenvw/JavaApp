@@ -48,10 +48,10 @@ stages:
 
 
 - stage: 'CD_DEV'
-  displayName: 'Deploy the application to the DEV environment '
+  displayName: 'Deploy the application to the TEST environment '
   variables:
   - name: 'resourcegroupname'
-    value: 'ms-csu-nl-jvw-javademoapp-dev'
+    value: 'ms-csu-nl-jvw-javademoapp-test'
   - name: 'armtemplatefile'
     value: 'application-resources.json'
   - name: 'armtemplateparams'
