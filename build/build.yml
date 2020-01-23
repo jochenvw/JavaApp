@@ -96,5 +96,5 @@ stages:
         azureSubscription: 'Microsoft Azure Internal Consumption(5fcb0d36-846f-4721-86e9-47f6c43494fd)'
         appType: 'webAppLinux'
         WebAppName: '$(arm_webappname)'
-        packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.jar'
+        packageForLinux: '$(System.ArtifactsDirectory)/drop/app/*.jar'
         RuntimeStack: 'JAVA|8-jre8'
