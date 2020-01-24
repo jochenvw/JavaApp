@@ -51,7 +51,9 @@ stages:
       inputs:
         SourceFolder: '$(System.DefaultWorkingDirectory)'
         Contents: |
-          **/*.jar
+          **/AI-Agent.xml
+          **/applicationinsights*.jar
+          **/app.jar
         TargetFolder: '$(Build.ArtifactStagingDirectory)/app'
         flattenFolders: true
 
