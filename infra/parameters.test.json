@@ -7,6 +7,9 @@
         },
         "webappserviceplanname": {
             "value": "ms-csu-nl-jvw-javademoapp-asp-test"
+        },
+        "appinsightsname": {
+            "value": "ms-csu-nl-jvw-javademoapp-insights-test"
         }
     }
 }

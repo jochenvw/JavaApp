@@ -1,5 +1,6 @@
 trigger:
 - master
+- feature/*
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -89,6 +90,19 @@ stages:
             foreach ($output in $outputs.PSObject.Properties) {
               Write-Host "##vso[task.setvariable variable=arm_$($output.Name)]$($output.Value.value)"
             }
+
+    - task: AzureAppServiceSettings@1
+      inputs:
+        azureSubscription: '$(serviceconnection)'
+        appName: '$(arm_webappname)'
+        resourceGroupName: '$(resourcegroupname)'
+        appSettings: |
+          [
+            {
+              "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+              "value": "$(arm_appinsightskey)"
+            }
+          ],
 
     - task: AzureRmWebAppDeployment@4
       inputs:
