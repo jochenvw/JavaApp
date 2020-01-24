@@ -52,6 +52,11 @@
       <artifactId>spring-boot-starter-web</artifactId>
       <scope>compile</scope>
     </dependency>
+    <dependency>
+      <groupId>com.microsoft.azure</groupId>
+      <artifactId>applicationinsights-web-auto</artifactId>
+      <version>2.6.0-BETA.2</version>
+    </dependency>
   </dependencies>
   <dependencyManagement>
     <dependencies>
