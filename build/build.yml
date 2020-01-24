@@ -25,6 +25,20 @@ stages:
         testResultsFiles: '**/surefire-reports/TEST-*.xml'
         goals: 'package'
 
+    - task: AzureResourceManagerTemplateDeployment@3
+      displayName: 'Validate ARM template'
+      inputs:
+        deploymentScope: 'Resource Group'
+        azureResourceManagerConnection: '$(serviceconnection)'
+        subscriptionId: '$(subscriptionid)'
+        action: 'Create Or Update Resource Group'
+        resourceGroupName: '$(resourcegroupname)'
+        location: 'westeurope'
+        templateLocation: 'Linked artifact'
+        csmFile: '$(System.DefaultWorkingDirectory)/infra/$(armtemplatefile)'
+        csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/$(armtemplateparams)'
+        deploymentMode: 'validate'
+
     - task: CopyFiles@2
       displayName: 'Copying app package to staging folder'
       inputs:
