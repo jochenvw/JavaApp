@@ -9,6 +9,9 @@ pool:
 stages:
 - stage: 'Build'
   displayName: 'Build and package application'
+  variables:
+  - name: 'resourcegroupname'
+    value: 'ms-csu-nl-jvw-javademoapp-test'
   jobs:
   - job:
     displayName: 'Prepping JAVA API app'
