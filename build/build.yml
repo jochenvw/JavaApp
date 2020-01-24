@@ -136,7 +136,7 @@ stages:
       displayName: 'Zip up application + agent JAR'
       inputs:
         rootFolderOrFile: '$(System.ArtifactsDirectory)/drop/app'
-        includeRootFolder: true
+        includeRootFolder: false
         archiveType: 'zip'
         archiveFile: '$(Build.ArtifactStagingDirectory)/app_package.zip'
         replaceExistingArchive: true
