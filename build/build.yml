@@ -130,7 +130,7 @@ stages:
             },
             {
               "name": "JAVA_OPTS",
-              "value": "-javaagent:D:/home/site/wwwroot/applicationinsights-agent-2.5.1.jar"
+              "value": "-javaagent:/home/site/wwwroot/applicationinsights-agent-2.5.1.jar"
             }
           ]
 
