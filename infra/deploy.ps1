@@ -1,1 +1,1 @@
-New-AzResourceGroupDeployment -ResourceGroupName ms-csu-nl-jvw-javademoapp-test -TemplateFile .\application-resources.json -TemplateParameterFile .\parameters.test.json
+New-AzResourceGroupDeployment -ResourceGroupName ms-csu-nl-jvw-javademoapp-test -TemplateFile .\application-resources.json -TemplateParameterFile .\parameters.test.json -Debug
