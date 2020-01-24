@@ -21,8 +21,7 @@
             "name": "[parameters('webappname')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[concat('Microsoft.Web/serverfarms/', parameters('webappserviceplanname'))]",
-
+                "[concat('Microsoft.Web/serverfarms/', parameters('webappserviceplanname'))]"
             ],
             "tags": {
             },
