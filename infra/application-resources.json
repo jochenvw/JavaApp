@@ -7,6 +7,9 @@
         },
         "webappserviceplanname": {
             "type": "string"
+        },
+        "appinsightsname": {
+            "type": "string"
         }
     },
     "variables": {
@@ -18,7 +21,8 @@
             "name": "[parameters('webappname')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[concat('Microsoft.Web/serverfarms/', parameters('webappserviceplanname'))]"
+                "[concat('Microsoft.Web/serverfarms/', parameters('webappserviceplanname'))]",
+
             ],
             "tags": {
             },
@@ -26,6 +30,10 @@
                 "name": "[parameters('webappname')]",
                 "siteConfig": {
                     "appSettings": [
+                        {
+                            "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                            "value": "-key-goes-here"
+                        }
                     ],
                     "linuxFxVersion": "JAVA|8-jre8",
                     "alwaysOn": true
@@ -57,6 +65,22 @@
                 "reserved": true,
                 "hostingEnvironment": ""
             }
+        },
+        {
+            "name": "[parameters('appinsightsname')]",
+            "type": "Microsoft.Insights/components",
+            "apiVersion": "2015-05-01",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "displayName": "Application insights for app"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('webappname'))]"
+            ],
+            "properties": {
+                "applicationId": "[resourceId('Microsoft.Web/sites', parameters('webappname'))]",
+                "application_Type": "web"
+            }
         }
     ],
     "outputs": {
@@ -67,6 +91,14 @@
         "webappserviceplanname": {
             "type": "string",
             "value": "[parameters('webappserviceplanname')]"
+        },
+        "appinsightsname": {
+            "type": "string",
+            "value": "[parameters('appinsightsname')]"
+        },
+        "appinsightskey": {
+            "type": "string",
+            "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appinsightsname')), '2014-04-01').InstrumentationKey]"
         }
     },
     "functions": [
