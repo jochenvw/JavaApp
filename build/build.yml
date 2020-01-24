@@ -51,7 +51,7 @@ stages:
       inputs:
         SourceFolder: '$(System.DefaultWorkingDirectory)'
         Contents: |
-          **/app.jar
+          **/*.jar
         TargetFolder: '$(Build.ArtifactStagingDirectory)/app'
         flattenFolders: true
 
@@ -122,6 +122,10 @@ stages:
             {
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
               "value": "$(arm_appinsightskey)"
+            },
+            {
+              "name": "JAVA_OPTS",
+              "value": "-javaagent:D:/home/site/wwwroot/applicationinsights-agent-2.5.1.jar"
             }
           ]
 
