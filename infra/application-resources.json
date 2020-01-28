@@ -10,6 +10,9 @@
         },
         "appinsightsname": {
             "type": "string"
+        },
+        "rgname": {
+            "type": "string"
         }
     },
     "variables": {

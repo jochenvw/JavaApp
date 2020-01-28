@@ -2,14 +2,17 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "webappname": {
+        "rgname": {
             "value": "ms-csu-nl-jvw-javademoapp-test"
         },
+        "webappname": {
+            "value": "ms-csu-nl-jvw-javademoapp-test-app"
+        },
         "webappserviceplanname": {
-            "value": "ms-csu-nl-jvw-javademoapp-asp-test"
+            "value": "ms-csu-nl-jvw-javademoapp-test-asp"
         },
         "appinsightsname": {
-            "value": "ms-csu-nl-jvw-javademoapp-insights-test"
+            "value": "ms-csu-nl-jvw-javademoapp-test-insights"
         }
     }
 }
