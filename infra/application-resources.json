@@ -42,7 +42,11 @@
                 },
                 "serverFarmId": "[concat('/subscriptions/', subscription().subscriptionId ,'/resourcegroups/', resourceGroup().name, '/providers/Microsoft.Web/serverfarms/', parameters('webappserviceplanname'))]",
                 "hostingEnvironment": "",
-                "clientAffinityEnabled": false
+                "clientAffinityEnabled": false,
+                "httpsOnly" : true
+            },
+            "identity" : {
+                "type" : "SystemAssigned"
             }
         },
         {
