@@ -94,6 +94,14 @@
             "type": "string",
             "value": "[parameters('webappname')]"
         },
+        "webappurl": {
+            "type": "string",
+            "value": "[reference(resourceId('Microsoft.Web/sites', parameters('webappname')), '2014-04-01').defaultHostName]"
+        },
+        "webappidentity": {
+            "type": "string",
+            "value": "[reference(resourceId('Microsoft.Web/sites', parameters('webappname')), '2014-04-01').identity.principalId]"
+        },
         "webappserviceplanname": {
             "type": "string",
             "value": "[parameters('webappserviceplanname')]"
