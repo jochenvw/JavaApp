@@ -103,7 +103,7 @@
                 "enableRbacAuthorization": false,
                 "accessPolicies": [
                 {
-                    "objectId": "[reference(resourceId('Microsoft.Web/sites', parameters('webappname')), '2019-08-01').identity.principalId]",
+                    "objectId": "[reference(resourceId('Microsoft.Web/sites', parameters('webappname')), '2019-08-01', 'Full').Identity.PrincipalId]",
                     "tenantId": "[subscription().tenantId]",
                     "permissions": {
                         "keys": [
@@ -141,7 +141,7 @@
             "tags": {
             },
             "dependsOn": [
-                "reference(resourceId('Microsoft.Web/sites', parameters('webappname')), '2019-08-01').identity.principalId"
+                "reference(resourceId('Microsoft.Web/sites', parameters('webappname')), '2019-08-01','Full').identity.principalId"
             ]
         }
     ],
