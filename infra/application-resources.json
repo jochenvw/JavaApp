@@ -96,11 +96,11 @@
         },
         "webappurl": {
             "type": "string",
-            "value": "[reference(resourceId('Microsoft.Web/sites', parameters('webappname')), '2019-04-01').defaultHostName]"
+            "value": "[reference(resourceId('Microsoft.Web/sites', parameters('webappname')), '2018-05-01-preview').defaultHostName]"
         },
         "webappidentity": {
             "type": "string",
-            "value": "[reference(resourceId('Microsoft.Web/sites', parameters('webappname')), '2019-04-01').identity.principalId]"
+            "value": "[reference(resourceId('Microsoft.Web/sites', parameters('webappname')), '2018-05-01-preview').identity.principalId]"
         },
         "webappserviceplanname": {
             "type": "string",
@@ -112,7 +112,7 @@
         },
         "appinsightskey": {
             "type": "string",
-            "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appinsightsname')), '2019-04-01').InstrumentationKey]"
+            "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appinsightsname')), '2018-05-01-preview').InstrumentationKey]"
         }
     },
     "functions": [
