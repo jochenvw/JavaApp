@@ -156,7 +156,7 @@
         },
         "webappidentity": {
             "type": "string",
-            "value": "[reference(resourceId('Microsoft.Web/sites', parameters('webappname')), '2019-08-01').identity.principalId]"
+            "value": "[reference(resourceId('Microsoft.Web/sites', parameters('webappname')), '2019-08-01', 'Full').Identity.PrincipalId]"
         },
         "webappserviceplanname": {
             "type": "string",
