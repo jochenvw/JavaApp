@@ -20,7 +20,7 @@
     "resources": [
         {
             "type": "Microsoft.Web/sites",
-            "apiVersion": "2018-11-01",
+            "apiVersion": "2019-08-01",
             "name": "[parameters('webappname')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
@@ -43,15 +43,15 @@
                 "serverFarmId": "[concat('/subscriptions/', subscription().subscriptionId ,'/resourcegroups/', resourceGroup().name, '/providers/Microsoft.Web/serverfarms/', parameters('webappserviceplanname'))]",
                 "hostingEnvironment": "",
                 "clientAffinityEnabled": false,
-                "httpsOnly" : true
+                "httpsOnly": true
             },
-            "identity" : {
-                "type" : "SystemAssigned"
+            "identity": {
+                "type": "SystemAssigned"
             }
         },
         {
             "type": "Microsoft.Web/serverfarms",
-            "apiVersion": "2018-11-01",
+            "apiVersion": "2019-08-01",
             "name": "[parameters('webappserviceplanname')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
@@ -75,7 +75,7 @@
         {
             "name": "[parameters('appinsightsname')]",
             "type": "Microsoft.Insights/components",
-            "apiVersion": "2015-05-01",
+            "apiVersion": "2019-08-01",
             "location": "[resourceGroup().location]",
             "tags": {
                 "displayName": "Application insights for app"
@@ -87,6 +87,59 @@
                 "applicationId": "[resourceId('Microsoft.Web/sites', parameters('webappname'))]",
                 "application_Type": "web"
             }
+        },
+        {
+            "apiVersion": "2019-08-01",
+            "name": "[parameters('keyvaultname')]",
+            "location": "westeurope",
+            "type": "Microsoft.KeyVault/vaults",
+            "properties": {
+                "enabledForDeployment": false,
+                "enabledForTemplateDeployment": true,
+                "enabledForDiskEncryption": false,
+                "enableRbacAuthorization": false,
+                "accessPolicies": [
+                {
+                    "objectId": "[reference(resourceId('Microsoft.Web/sites', parameters('webappname')), '2019-08-01').identity.principalId]",
+                    "tenantId": "[subscription().tenantId]",
+                    "permissions": {
+                        "keys": [
+                            "Get",
+                            "List"
+                        ],
+                        "secrets": [
+                            "Get",
+                            "List"
+                        ],
+                        "certificates": [
+                            "Get",
+                            "List"
+                        ]
+                    },
+                    "applicationId": null
+                }],
+                "tenantId": "[subscription().tenantId]",
+                "sku": {
+                    "name": "Premium",
+                    "family": "A"
+                },
+                "enableSoftDelete": true,
+                "softDeleteRetentionInDays": 90,
+                "enablePurgeProtection": true,
+                "networkAcls": {
+                    "defaultAction": "allow",
+                    "bypass": "AzureServices",
+                    "ipRules": [
+                    ],
+                    "virtualNetworkRules": [
+                    ]
+                }
+            },
+            "tags": {
+            },
+            "dependsOn": [
+                "reference(resourceId('Microsoft.Web/sites', parameters('webappname')), '2019-08-01').identity.principalId"
+            ]
         }
     ],
     "outputs": {
@@ -96,11 +149,11 @@
         },
         "webappurl": {
             "type": "string",
-            "value": "[reference(resourceId('Microsoft.Web/sites', parameters('webappname')), '2018-05-01-preview').defaultHostName]"
+            "value": "[reference(resourceId('Microsoft.Web/sites', parameters('webappname')), '2019-08-01').defaultHostName]"
         },
         "webappidentity": {
             "type": "string",
-            "value": "[reference(resourceId('Microsoft.Web/sites', parameters('webappname')), '2018-05-01-preview').identity.principalId]"
+            "value": "[reference(resourceId('Microsoft.Web/sites', parameters('webappname')), '2019-08-01').identity.principalId]"
         },
         "webappserviceplanname": {
             "type": "string",
@@ -112,7 +165,7 @@
         },
         "appinsightskey": {
             "type": "string",
-            "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appinsightsname')), '2018-05-01-preview').InstrumentationKey]"
+            "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appinsightsname')), '2019-08-01').InstrumentationKey]"
         }
     },
     "functions": [
