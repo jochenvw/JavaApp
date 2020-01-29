@@ -13,6 +13,9 @@
         },
         "rgname": {
             "type": "string"
+        },
+        "keyvaultname": {
+            "type": "string"
         }
     },
     "variables": {

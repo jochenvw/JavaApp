@@ -13,6 +13,9 @@
         },
         "appinsightsname": {
             "value": "ms-csu-nl-jvw-javademoapp-test-insights"
+        },
+        "keyvaultname": {
+            "value": "ms-csu-nl-jvw-secrets"
         }
     }
 }
