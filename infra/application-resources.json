@@ -167,7 +167,7 @@
         },
         "appinsightskey": {
             "type": "string",
-            "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appinsightsname')), '2019-08-01').InstrumentationKey]"
+            "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appinsightsname')), '2018-05-01-preview').InstrumentationKey]"
         }
     },
     "functions": [
