@@ -172,7 +172,7 @@
         "keyvaulturl": {
             "type": "string",
             "value": "[reference(resourceId('Microsoft.KeyVault/vaults', parameters('keyvaultname')), '2019-09-01').vaultUri]"
-        },
+        }
     },
     "functions": [
     ]
