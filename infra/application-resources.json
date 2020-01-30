@@ -3,33 +3,42 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "webappname": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "-api"
         },
         "webappserviceplanname": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "-asp"
         },
         "appinsightsname": {
-            "type": "string"
-        },
-        "rgname": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "-insights"
         },
         "keyvaultname": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "vault"
         },
         "virtualNetworkName": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "-vnet"
         },
         "applicationGatewayName": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "-gw"
         },
         "publicIpAddressName": {
-            "type": "string"
-        },
-        "publicIpAddressNameDomainNameLabel": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "-gw-pip"
         },
         "apimgmtname": {
+            "type": "string",
+            "defaultValue": "-apimgmt"
+        },
+        "cosmosdbaccount": {
+            "type": "string",
+            "defaultValue": "cosmosdb"
+        },
+        "publicIpAddressNameDomainNameLabel": {
             "type": "string"
         },
         "apimgmtadminmail": {
@@ -38,31 +47,51 @@
         "apimgmtorg": {
             "type": "string"
         },
-        "cosmosdbaccount": {
-            "type": "string"
+        "resourcenameprefix": {
+            "type": "string",
+            "defaultValue": "javademoapp-test"
+        },
+        "resourcenamepostfix": {
+            "type": "string",
+            "defaultValue": ""
         }
     },
     "variables": {
-        "vnetId": "[resourceId('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]",
-        "publicIPRef": "[resourceId('Microsoft.Network/publicIPAddresses/', parameters('publicIpAddressName'))]",
-        "dmzSubnetRef": "[concat(variables('vnetId'), '/subnets/', 'DMZ')]",
+        "webappname" : "[concat(parameters('resourcenameprefix'), parameters('webappname'), parameters('resourcenamepostfix'))]",
+        "webappserviceplanname": "[concat(parameters('resourcenameprefix'), parameters('webappserviceplanname'), parameters('resourcenamepostfix'))]",
+        "appinsightsname": "[concat(parameters('resourcenameprefix'), parameters('appinsightsname'), parameters('resourcenamepostfix'))]",
+        "keyvaultname": "[concat(parameters('resourcenameprefix'), parameters('keyvaultname'), parameters('resourcenamepostfix'))]",
+        "virtualNetworkName": "[concat(parameters('resourcenameprefix'), parameters('virtualNetworkName'), parameters('resourcenamepostfix'))]",
+        "applicationGatewayName": "[concat(parameters('resourcenameprefix'), parameters('applicationGatewayName'), parameters('resourcenamepostfix'))]",
+        "publicIpAddressName": "[concat(parameters('resourcenameprefix'), parameters('publicIpAddressName'), parameters('resourcenamepostfix'))]",
+        "apimgmtname": "[concat(parameters('resourcenameprefix'), parameters('apimgmtname'), parameters('resourcenamepostfix'))]",
+        "cosmosdbaccount": "[concat(parameters('resourcenameprefix'), parameters('cosmosdbaccount'), parameters('resourcenamepostfix'))]",
+
+        "publicIpAddressNameDomainNameLabel": "[parameters('publicIpAddressNameDomainNameLabel')]",
+        "apimgmtadminmail": "[parameters('apimgmtadminmail')]",
+        "apimgmtorg": "[parameters('apimgmtorg')]",
+
+        "vnetId": "[resourceId('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]",
+        "publicIPRef": "[resourceId('Microsoft.Network/publicIPAddresses/', variables('publicIpAddressName'))]",
+        "appGWSubnetRef": "[concat(variables('vnetId'), '/subnets/', 'AppGWSubnet')]",
+        "apiMGMTSubnetRef": "[concat(variables('vnetId'), '/subnets/', 'ApiMgmtSubnet')]",
         "appSubnetRef": "[concat(variables('vnetId'), '/subnets/', 'AppTier')]",
         "applicationGatewayId": "[resourceId('Microsoft.Network/applicationGateways', parameters('applicationGatewayName'))]",
-        "appgwprivateip": "10.0.0.200"
+        "appgwprivateip": "10.0.1.200"
     },
     "resources": [
         {
             "type": "Microsoft.Web/sites",
             "apiVersion": "2019-08-01",
-            "name": "[parameters('webappname')]",
+            "name": "[variables('webappname')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[concat('Microsoft.Web/serverfarms/', parameters('webappserviceplanname'))]"
+                "[concat('Microsoft.Web/serverfarms/', variables('webappserviceplanname'))]"
             ],
             "tags": {
             },
             "properties": {
-                "name": "[parameters('webappname')]",
+                "name": "[variables('webappname')]",
                 "siteConfig": {
                     "appSettings": [
                         {
@@ -73,7 +102,7 @@
                     "linuxFxVersion": "JAVA|8-jre8",
                     "alwaysOn": true
                 },
-                "serverFarmId": "[concat('/subscriptions/', subscription().subscriptionId ,'/resourcegroups/', resourceGroup().name, '/providers/Microsoft.Web/serverfarms/', parameters('webappserviceplanname'))]",
+                "serverFarmId": "[concat('/subscriptions/', subscription().subscriptionId ,'/resourcegroups/', resourceGroup().name, '/providers/Microsoft.Web/serverfarms/', variables('webappserviceplanname'))]",
                 "hostingEnvironment": "",
                 "clientAffinityEnabled": false,
                 "httpsOnly": true
@@ -87,8 +116,8 @@
                 "apiVersion": "2018-02-01",
                 "location": "westeurope",
                 "dependsOn": [
-                    "[concat('Microsoft.Web/sites/', parameters('webappname'))]",
-                    "[concat('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]"
+                    "[concat('Microsoft.Web/sites/', variables('webappname'))]",
+                    "[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
                 ],
                 "properties": {
                     "subnetResourceId": "[variables('appSubnetRef')]",
@@ -99,10 +128,10 @@
         {
             "type": "Microsoft.Web/sites/config",
             "apiVersion": "2018-11-01",
-            "name": "[concat(parameters('webappname'), '/web')]",
+            "name": "[concat(variables('webappname'), '/web')]",
             "location": "West Europe",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('webappname'))]"
+                "[resourceId('Microsoft.Web/sites', variables('webappname'))]"
             ],
             "properties": {
                 "linuxFxVersion": "JAVA|8-jre8",
@@ -139,7 +168,7 @@
         {
             "type": "Microsoft.Web/serverfarms",
             "apiVersion": "2019-08-01",
-            "name": "[parameters('webappserviceplanname')]",
+            "name": "[variables('webappserviceplanname')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
             ],
@@ -151,7 +180,7 @@
             },
             "kind": "linux",
             "properties": {
-                "name": "[parameters('webappserviceplanname')]",
+                "name": "[variables('webappserviceplanname')]",
                 "workerSize": "3",
                 "workerSizeId": "3",
                 "numberOfWorkers": "1",
@@ -160,7 +189,7 @@
             }
         },
         {
-            "name": "[parameters('appinsightsname')]",
+            "name": "[variables('appinsightsname')]",
             "type": "Microsoft.Insights/components",
             "apiVersion": "2018-05-01-preview",
             "location": "[resourceGroup().location]",
@@ -168,16 +197,16 @@
                 "displayName": "Application insights for app"
             },
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('webappname'))]"
+                "[resourceId('Microsoft.Web/sites', variables('webappname'))]"
             ],
             "properties": {
-                "applicationId": "[resourceId('Microsoft.Web/sites', parameters('webappname'))]",
+                "applicationId": "[resourceId('Microsoft.Web/sites', variables('webappname'))]",
                 "application_Type": "web"
             }
         },
         {
             "apiVersion": "2019-09-01",
-            "name": "[parameters('keyvaultname')]",
+            "name": "[variables('keyvaultname')]",
             "location": "westeurope",
             "type": "Microsoft.KeyVault/vaults",
             "properties": {
@@ -187,7 +216,7 @@
                 "enableRbacAuthorization": false,
                 "accessPolicies": [
                     {
-                        "objectId": "[reference(resourceId('Microsoft.Web/sites', parameters('webappname')), '2019-08-01', 'Full').identity.principalId]",
+                        "objectId": "[reference(resourceId('Microsoft.Web/sites', variables('webappname')), '2019-08-01', 'Full').identity.principalId]",
                         "tenantId": "[subscription().tenantId]",
                         "permissions": {
                             "keys": [
@@ -230,7 +259,7 @@
         },
 
         {
-            "name": "[parameters('virtualNetworkName')]",
+            "name": "[variables('virtualNetworkName')]",
             "type": "Microsoft.Network/VirtualNetworks",
             "apiVersion": "2019-09-01",
             "location": "westeurope",
@@ -246,15 +275,21 @@
                 },
                 "subnets": [
                     {
-                        "name": "DMZ",
+                        "name": "ApiMgmtSubnet",
                         "properties": {
                             "addressPrefix": "10.0.0.0/24"
                         }
                     },
                     {
+                        "name": "AppGWSubnet",
+                        "properties": {
+                            "addressPrefix": "10.0.1.0/24"
+                        }
+                    },
+                    {
                         "name": "AppTier",
                         "properties": {
-                            "addressPrefix": "10.0.1.0/24",
+                            "addressPrefix": "10.0.2.0/24",
                             "serviceEndpoints": [
                                 {
                                     "service": "Microsoft.Web"
@@ -279,7 +314,7 @@
             }
         },
         {
-            "name": "[parameters('applicationGatewayName')]",
+            "name": "[variables('applicationGatewayName')]",
             "type": "Microsoft.Network/applicationGateways",
             "apiVersion": "2019-09-01",
             "location": "westeurope",
@@ -289,7 +324,7 @@
                 "3"
             ],
             "dependsOn": [
-                "[concat('Microsoft.Network/publicIPAddresses/', parameters('publicIpAddressName'))]"
+                "[concat('Microsoft.Network/publicIPAddresses/', variables('publicIpAddressName'))]"
             ],
             "tags": {
             },
@@ -303,8 +338,8 @@
                         "name": "appGatewayIpConfig",
                         "properties": {
                             "subnet": {
-                                "id": "[variables('dmzSubnetRef')]",
-                                "appid": "[variables('dmzSubnetRef')]"
+                                "id": "[variables('appGWSubnetRef')]",
+                                "appid": "[variables('appGWSubnetRef')]"
                             }
                         }
                     }
@@ -322,8 +357,8 @@
                         "name": "appGwPrivateFrontendIp",
                         "properties": {
                             "subnet": {
-                                "id": "[variables('dmzSubnetRef')]",
-                                "appid": "[variables('dmzSubnetRef')]"
+                                "id": "[variables('appGWSubnetRef')]",
+                                "appid": "[variables('appGWSubnetRef')]"
                             },
                             "privateIPAddress": "[variables('appgwprivateip')]",
                             "privateIPAllocationMethod": "Static"
@@ -344,7 +379,7 @@
                         "properties": {
                             "backendAddresses": [
                                 {
-                                    "fqdn": "[reference(resourceId('Microsoft.Web/sites', parameters('webappname')), '2019-08-01').defaultHostName]"
+                                    "fqdn": "[reference(resourceId('Microsoft.Web/sites', variables('webappname')), '2019-08-01').defaultHostName]"
                                 }
                             ]
                         }
@@ -417,7 +452,7 @@
         {
             "apiVersion": "2019-02-01",
             "type": "Microsoft.Network/publicIPAddresses",
-            "name": "[parameters('publicIpAddressName')]",
+            "name": "[variables('publicIpAddressName')]",
             "location": "westeurope",
             "sku": {
                 "name": "Standard"
@@ -425,24 +460,24 @@
             "properties": {
                 "publicIPAllocationMethod": "Static",
                 "dnsSettings": {
-                    "domainNameLabel": "[parameters('publicIpAddressNameDomainNameLabel')]"
+                    "domainNameLabel": "[variables('publicIpAddressNameDomainNameLabel')]"
                 }
             }
         },
         {
             "type": "Microsoft.ApiManagement/service",
             "apiVersion": "2019-01-01",
-            "name": "[parameters('apimgmtname')]",
+            "name": "[variables('apimgmtname')]",
             "location": "westeurope",
             "sku": {
                 "name": "Developer",
                 "capacity": "1"
             },
             "properties": {
-                "publisherEmail": "[parameters('apimgmtadminmail')]",
-                "publisherName": "[parameters('apimgmtorg')]",
+                "publisherEmail": "[variables('apimgmtadminmail')]",
+                "publisherName": "[variables('apimgmtorg')]",
                 "virtualNetworkConfiguration": {
-                    "subnetResourceId": "[variables('dmzSubnetRef')]"
+                    "subnetResourceId": "[variables('apiMGMTSubnetRef')]"
                 },
                 "virtualNetworkType": "External"
             },
@@ -450,15 +485,15 @@
                 {
                     "type": "loggers",
                     "apiVersion": "2019-01-01",
-                    "name": "[parameters('appinsightsname')]",
+                    "name": "[variables('appinsightsname')]",
                     "dependsOn": [
-                        "[concat('Microsoft.ApiManagement/service/', parameters('apimgmtname'))]"
+                        "[concat('Microsoft.ApiManagement/service/', variables('apimgmtname'))]"
                     ],
                     "properties": {
                         "loggerType": "applicationInsights",
-                        "resourceId": "[reference(resourceId('Microsoft.Insights/components', parameters('appinsightsname')), '2018-05-01-preview').Id]",
+                        "resourceId": "[reference(resourceId('Microsoft.Insights/components', variables('appinsightsname')), '2018-05-01-preview').Id]",
                         "credentials": {
-                            "instrumentationKey": "[reference(resourceId('Microsoft.Insights/components', parameters('appinsightsname')), '2018-05-01-preview').InstrumentationKey]"
+                            "instrumentationKey": "[reference(resourceId('Microsoft.Insights/components', variables('appinsightsname')), '2018-05-01-preview').InstrumentationKey]"
                         }
                     }
                 },
@@ -467,11 +502,11 @@
                     "apiVersion": "2019-01-01",
                     "name": "applicationinsights",
                     "dependsOn": [
-                        "[concat('Microsoft.ApiManagement/service/', parameters('apimgmtname'))]",
-                        "[concat('Microsoft.ApiManagement/service/', parameters('apimgmtname'), '/loggers/', parameters('appinsightsname'))]"
+                        "[concat('Microsoft.ApiManagement/service/', variables('apimgmtname'))]",
+                        "[concat('Microsoft.ApiManagement/service/', variables('apimgmtname'), '/loggers/', variables('appinsightsname'))]"
                     ],
                     "properties": {
-                        "loggerId": "[concat('/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/', parameters('apimgmtname'), '/loggers/', parameters('appinsightsname'))]",
+                        "loggerId": "[concat('/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/', variables('apimgmtname'), '/loggers/', variables('appinsightsname'))]",
                         "alwaysLog": "allErrors",
                         "sampling": {
                             "percentage": 100,
@@ -485,18 +520,18 @@
             "apiVersion": "2019-12-12",
             "kind": "GlobalDocumentDB",
             "type": "Microsoft.DocumentDb/databaseAccounts",
-            "name": "[parameters('cosmosdbaccount')]",
+            "name": "[variables('cosmosdbaccount')]",
             "location": "westeurope",
             "properties": {
                 "databaseAccountOfferType": "Standard",
                 "locations": [
                     {
-                        "id": "[concat(parameters('cosmosdbaccount'), '-', 'westeurope')]",
+                        "id": "[concat(variables('cosmosdbaccount'), '-', 'westeurope')]",
                         "failoverPriority": 0,
                         "locationName": "westeurope"
                     },
                     {
-                        "id": "[concat(parameters('cosmosdbaccount'), '-', 'northeurope')]",
+                        "id": "[concat(variables('cosmosdbaccount'), '-', 'northeurope')]",
                         "failoverPriority": 1,
                         "locationName": "northeurope"
                     }
@@ -523,31 +558,31 @@
     "outputs": {
         "webappname": {
             "type": "string",
-            "value": "[parameters('webappname')]"
+            "value": "[variables('webappname')]"
         },
         "webappurl": {
             "type": "string",
-            "value": "[reference(resourceId('Microsoft.Web/sites', parameters('webappname')), '2019-08-01').defaultHostName]"
+            "value": "[reference(resourceId('Microsoft.Web/sites', variables('webappname')), '2019-08-01').defaultHostName]"
         },
         "webappidentity": {
             "type": "string",
-            "value": "[reference(resourceId('Microsoft.Web/sites', parameters('webappname')), '2019-08-01', 'Full').identity.principalId]"
+            "value": "[reference(resourceId('Microsoft.Web/sites', variables('webappname')), '2019-08-01', 'Full').identity.principalId]"
         },
         "webappserviceplanname": {
             "type": "string",
-            "value": "[parameters('webappserviceplanname')]"
+            "value": "[variables('webappserviceplanname')]"
         },
         "appinsightsname": {
             "type": "string",
-            "value": "[parameters('appinsightsname')]"
+            "value": "[variables('appinsightsname')]"
         },
         "appinsightskey": {
             "type": "string",
-            "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appinsightsname')), '2018-05-01-preview').InstrumentationKey]"
+            "value": "[reference(resourceId('Microsoft.Insights/components', variables('appinsightsname')), '2018-05-01-preview').InstrumentationKey]"
         },
         "keyvaulturl": {
             "type": "string",
-            "value": "[reference(resourceId('Microsoft.KeyVault/vaults', parameters('keyvaultname')), '2019-09-01').vaultUri]"
+            "value": "[reference(resourceId('Microsoft.KeyVault/vaults', variables('keyvaultname')), '2019-09-01').vaultUri]"
         }
     },
     "functions": [

@@ -2,44 +2,20 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "rgname": {
-            "value": "ms-csu-nl-jvw-javademoapp-test"
+        "resourcenameprefix": {
+            "value": "demo-test"
         },
-        "webappname": {
-            "value": "ms-csu-nl-jvw-javademoapp-test-app"
-        },
-        "webappserviceplanname": {
-            "value": "ms-csu-nl-jvw-javademoapp-test-asp"
-        },
-        "appinsightsname": {
-            "value": "ms-csu-nl-jvw-javademoapp-test-insights"
-        },
-        "keyvaultname": {
-            "value": "ms-csu-nl-jvw-secrets"
-        },
-        "virtualNetworkName": {
-            "value": "ms-csu-nl-jvw-javademoapp-test-vnet"
-        },
-        "applicationGatewayName": {
-            "value": "ms-csu-nl-jvw-javademoapp-test-gw"
-        },
-        "publicIpAddressName": {
-            "value": "ms-csu-nl-jvw-javademoapp-test-gw-pip"
+        "resourcenamepostfix": {
+            "value": ""
         },
         "publicIpAddressNameDomainNameLabel": {
             "value": "jvwjavaappgateway"
-        },
-        "apimgmtname": {
-            "value": "ms-csu-nl-jvw-javademoapp-test-apimgmt"
         },
         "apimgmtadminmail": {
             "value": "whatever@mail.com"
         },
         "apimgmtorg": {
             "value": "jvwcorp"
-        },
-        "cosmosdbaccount": {
-            "value": "ms-csu-nl-jvw-javademoapp-test-cosmos"
         }
     }
 }
