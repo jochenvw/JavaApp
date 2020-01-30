@@ -18,16 +18,25 @@
             "value": "ms-csu-nl-jvw-secrets"
         },
         "virtualNetworkName": {
-            "value": "ms-csu-nl-jvw-vnet"
+            "value": "ms-csu-nl-jvw-javademoapp-test-vnet"
         },
         "applicationGatewayName": {
-            "value": "ms-csu-nl-jvw-gw"
+            "value": "ms-csu-nl-jvw-javademoapp-test-gw"
         },
         "publicIpAddressName": {
-            "value": "ms-csu-nl-jvw-gw-pip"
+            "value": "ms-csu-nl-jvw-javademoapp-test-gw-pip"
         },
         "publicIpAddressNameDomainNameLabel": {
             "value": "jvwjavaappgateway"
+        },
+        "apimgmtname": {
+            "value": "ms-csu-nl-jvw-javademoapp-test-apimgmt"
+        },
+        "apimgmtadminmail": {
+            "value": "whatever@mail.com"
+        },
+        "apimgmtorg": {
+            "value": "jvwcorp"
         }
     }
 }

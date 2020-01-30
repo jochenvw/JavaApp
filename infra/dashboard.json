@@ -19,6 +19,24 @@
         },
         "virtualNetworkName": {
             "type": "string"
+        },
+        "applicationGatewayName": {
+            "type": "string"
+        },
+        "publicIpAddressName": {
+            "type": "string"
+        },
+        "publicIpAddressNameDomainNameLabel": {
+            "type": "string"
+        },
+        "apimgmtname": {
+            "type": "string"
+        },
+        "apimgmtadminmail": {
+            "type": "string"
+        },
+        "apimgmtorg": {
+            "type": "string"
         }
     },
     "variables": {

@@ -28,6 +28,15 @@
         },
         "publicIpAddressNameDomainNameLabel": {
             "type": "string"
+        },
+        "apimgmtname": {
+            "type": "string"
+        },
+        "apimgmtadminmail": {
+            "type": "string"
+        },
+        "apimgmtorg": {
+            "type": "string"
         }
     },
     "variables": {
@@ -354,6 +363,54 @@
                     "domainNameLabel": "[parameters('publicIpAddressNameDomainNameLabel')]"
                 }
             }
+        },
+        {
+            "type": "Microsoft.ApiManagement/service",
+            "apiVersion": "2019-01-01",
+            "name": "[parameters('apimgmtname')]",
+            "location": "westeurope",
+            "sku": {
+                "name": "Developer",
+                "capacity": "1"
+            },
+            "properties": {
+                "publisherEmail": "[parameters('apimgmtadminmail')]",
+                "publisherName": "[parameters('apimgmtorg')]"
+            },
+            "resources": [
+                {
+                    "type": "loggers",
+                    "apiVersion": "2019-01-01",
+                    "name": "[parameters('appinsightsname')]",
+                    "dependsOn": [
+                        "[concat('Microsoft.ApiManagement/service/', parameters('apimgmtname'))]"
+                    ],
+                    "properties": {
+                        "loggerType": "applicationInsights",
+                        "resourceId": "[reference(resourceId('Microsoft.Insights/components', parameters('appinsightsname')), '2018-05-01-preview').Id]",
+                        "credentials": {
+                            "instrumentationKey": "[reference(resourceId('Microsoft.Insights/components', parameters('appinsightsname')), '2018-05-01-preview').InstrumentationKey]"
+                        }
+                    }
+                },
+                {
+                    "type": "diagnostics",
+                    "apiVersion": "2019-01-01",
+                    "name": "applicationinsights",
+                    "dependsOn": [
+                        "[concat('Microsoft.ApiManagement/service/', parameters('apimgmtname'))]",
+                        "[concat('Microsoft.ApiManagement/service/', parameters('apimgmtname'), '/loggers/', parameters('appinsightsname'))]"
+                    ],
+                    "properties": {
+                        "loggerId": "[concat('/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/', parameters('apimgmtname'), '/loggers/', parameters('appinsightsname'))]",
+                        "alwaysLog": "allErrors",
+                        "sampling": {
+                            "percentage": 100,
+                            "samplingType": "fixed"
+                        }
+                    }
+                }
+            ]
         }
     ],
     "outputs": {
