@@ -37,6 +37,9 @@
         },
         "apimgmtorg": {
             "value": "jvwcorp"
+        },
+        "cosmosdbaccount": {
+            "value": "ms-csu-nl-jvw-javademoapp-test-cosmos"
         }
     }
 }

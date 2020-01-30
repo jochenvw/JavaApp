@@ -37,13 +37,18 @@
         },
         "apimgmtorg": {
             "type": "string"
+        },
+        "cosmosdbaccount": {
+            "type": "string"
         }
     },
     "variables": {
         "vnetId": "[resourceId('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]",
         "publicIPRef": "[resourceId('Microsoft.Network/publicIPAddresses/', parameters('publicIpAddressName'))]",
-        "subnetRef": "[concat(variables('vnetId'), '/subnets/', 'DMZ')]",
-        "applicationGatewayId": "[resourceId('Microsoft.Network/applicationGateways', parameters('applicationGatewayName'))]"
+        "dmzSubnetRef": "[concat(variables('vnetId'), '/subnets/', 'DMZ')]",
+        "appSubnetRef": "[concat(variables('vnetId'), '/subnets/', 'AppTier')]",
+        "applicationGatewayId": "[resourceId('Microsoft.Network/applicationGateways', parameters('applicationGatewayName'))]",
+        "appgwprivateip": "10.0.0.200"
     },
     "resources": [
         {
@@ -75,6 +80,59 @@
             },
             "identity": {
                 "type": "SystemAssigned"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/virtualNetworkConnections",
+            "apiVersion": "2018-11-01",
+            "name": "[concat(parameters('webappname'), '/VNET-AppTier-Access')]",
+            "location": "West Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('webappname'))]"
+            ],
+            "properties": {
+                "vnetResourceId": "[variables('appSubnetRef')]",
+                "isSwift": true
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/config",
+            "apiVersion": "2018-11-01",
+            "name": "[concat(parameters('webappname'), '/web')]",
+            "location": "West Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('webappname'))]"
+            ],
+            "properties": {
+                "linuxFxVersion": "JAVA|8-jre8",
+                "ipSecurityRestrictions": [
+                    {
+                        "ipAddress": "[concat(variables('appgwprivateip'),'/32')]",
+                        "action": "Allow",
+                        "tag": "Default",
+                        "priority": 100,
+                        "name": "AllowOnlyAppGWTraffic",
+                        "description": "Only allow traffic from the Application Gateway"
+                    },
+                    {
+                        "ipAddress": "Any",
+                        "action": "Deny",
+                        "priority": 2147483647,
+                        "name": "Deny all",
+                        "description": "Deny all access"
+                    }
+                ],
+                "scmIpSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 1,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "minTlsVersion": "1.2",
+                "ftpsState": "Disabled"
             }
         },
         {
@@ -244,7 +302,8 @@
                         "name": "appGatewayIpConfig",
                         "properties": {
                             "subnet": {
-                                "id": "[variables('subnetRef')]"
+                                "id": "[variables('dmzSubnetRef')]",
+                                "appid": "[variables('dmzSubnetRef')]"
                             }
                         }
                     }
@@ -262,9 +321,10 @@
                         "name": "appGwPrivateFrontendIp",
                         "properties": {
                             "subnet": {
-                                "id": "[variables('subnetRef')]"
+                                "id": "[variables('dmzSubnetRef')]",
+                                "appid": "[variables('dmzSubnetRef')]"
                             },
-                            "privateIPAddress": "10.0.0.200",
+                            "privateIPAddress": "[variables('appgwprivateip')]",
                             "privateIPAllocationMethod": "Static"
                         }
                     }
@@ -411,6 +471,44 @@
                     }
                 }
             ]
+        },
+        {
+            "apiVersion": "2019-12-12",
+            "kind": "GlobalDocumentDB",
+            "type": "Microsoft.DocumentDb/databaseAccounts",
+            "name": "[parameters('cosmosdbaccount')]",
+            "location": "westeurope",
+            "properties": {
+                "databaseAccountOfferType": "Standard",
+                "locations": [
+                    {
+                        "id": "[concat(parameters('cosmosdbaccount'), '-', 'westeurope')]",
+                        "failoverPriority": 0,
+                        "locationName": "westeurope"
+                    },
+                    {
+                        "id": "[concat(parameters('cosmosdbaccount'), '-', 'northeurope')]",
+                        "failoverPriority": 1,
+                        "locationName": "northeurope"
+                    }
+                ],
+                "enableMultipleWriteLocations": true,
+                "isVirtualNetworkFilterEnabled": true,
+                "virtualNetworkRules": [
+                    {
+                        "id": "[variables('appSubnetRef')]"
+                    }
+                ],
+                "ipRangeFilter": "104.42.195.92,40.76.54.131,52.176.6.30,52.169.50.45,52.187.184.26,213.127.31.86",
+                "dependsOn": [
+                ],
+                "capabilities": [
+                ]
+            },
+            "tags": {
+                "defaultExperience": "Core (SQL)",
+                "hidden-cosmos-mmspecial": ""
+            }
         }
     ],
     "outputs": {
