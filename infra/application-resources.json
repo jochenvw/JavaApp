@@ -240,9 +240,9 @@
                     "name": "Premium",
                     "family": "A"
                 },
-                "enableSoftDelete": true,
+                "enableSoftDelete": false,
                 "softDeleteRetentionInDays": 90,
-                "enablePurgeProtection": true,
+                "enablePurgeProtection": false,
                 "networkAcls": {
                     "defaultAction": "allow",
                     "bypass": "AzureServices",
@@ -392,7 +392,8 @@
                             "Port": 443,
                             "Protocol": "Https",
                             "cookieBasedAffinity": "Disabled",
-                            "requestTimeout": 20
+                            "requestTimeout": 20,
+                            "pickHostNameFromBackendAddress": true
                         }
                     }
                 ],
