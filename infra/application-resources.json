@@ -435,7 +435,11 @@
             },
             "properties": {
                 "publisherEmail": "[parameters('apimgmtadminmail')]",
-                "publisherName": "[parameters('apimgmtorg')]"
+                "publisherName": "[parameters('apimgmtorg')]",
+                "virtualNetworkConfiguration": {
+                    "subnetResourceId": "[variables('dmzSubnetRef')]"
+                },
+                "virtualNetworkType": "External"
             },
             "resources": [
                 {
