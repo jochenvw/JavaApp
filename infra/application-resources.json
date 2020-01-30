@@ -76,7 +76,7 @@
         "appGWSubnetRef": "[concat(variables('vnetId'), '/subnets/', 'AppGWSubnet')]",
         "apiMGMTSubnetRef": "[concat(variables('vnetId'), '/subnets/', 'ApiMgmtSubnet')]",
         "appSubnetRef": "[concat(variables('vnetId'), '/subnets/', 'AppTier')]",
-        "applicationGatewayId": "[resourceId('Microsoft.Network/applicationGateways', parameters('applicationGatewayName'))]",
+        "applicationGatewayId": "[resourceId('Microsoft.Network/applicationGateways', variables('applicationGatewayName'))]",
         "appgwprivateip": "10.0.1.200"
     },
     "resources": [
