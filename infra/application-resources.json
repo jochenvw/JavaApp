@@ -77,7 +77,8 @@
         "apiMGMTSubnetRef": "[concat(variables('vnetId'), '/subnets/', 'ApiMgmtSubnet')]",
         "appSubnetRef": "[concat(variables('vnetId'), '/subnets/', 'AppTier')]",
         "applicationGatewayId": "[resourceId('Microsoft.Network/applicationGateways', variables('applicationGatewayName'))]",
-        "appgwprivateip": "10.0.1.200"
+        "appgwprivateip": "10.0.1.200",
+        "appgwpublicip": "[reference(resourceId('Microsoft.Network/publicIPAddresses/', variables('publicIpAddressName')),'2017-11-01').ipAddress]"
     },
     "resources": [
         {
@@ -137,7 +138,7 @@
                 "linuxFxVersion": "JAVA|8-jre8",
                 "ipSecurityRestrictions": [
                     {
-                        "ipAddress": "[concat(variables('appgwprivateip'),'/32')]",
+                        "ipAddress": "[concat(variables('appgwpublicip'),'/32')]",
                         "action": "Allow",
                         "tag": "Default",
                         "priority": 100,
