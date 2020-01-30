@@ -19,6 +19,15 @@
         },
         "virtualNetworkName": {
             "value": "ms-csu-nl-jvw-vnet"
+        },
+        "applicationGatewayName": {
+            "value": "ms-csu-nl-jvw-gw"
+        },
+        "publicIpAddressName": {
+            "value": "ms-csu-nl-jvw-gw-pip"
+        },
+        "publicIpAddressNameDomainNameLabel": {
+            "value": "jvwjavaappgateway"
         }
     }
 }
