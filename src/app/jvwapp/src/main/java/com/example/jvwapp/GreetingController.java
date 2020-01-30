@@ -18,8 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class GreetingController {
 
-	@Autowired
-	TelemetryClient telemetryClient;
+	TelemetryClient telemetryClient = new TelemetryClient();
 
 	private static final String template = "Hello, %s!";
 	private final AtomicLong counter = new AtomicLong();
