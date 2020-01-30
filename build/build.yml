@@ -16,6 +16,9 @@ stages:
     value: 'application-resources.json'
   - name: 'armtemplateparams'
     value: 'parameters.test.json'
+  - name: 'system.debug'
+    value: 'true'
+
   jobs:
   - job:
     displayName: 'Prepping JAVA API app'
