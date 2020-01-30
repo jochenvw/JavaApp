@@ -57,7 +57,7 @@
         }
     },
     "variables": {
-        "webappname" : "[concat(parameters('resourcenameprefix'), parameters('webappname'), parameters('resourcenamepostfix'))]",
+        "webappname": "[concat(parameters('resourcenameprefix'), parameters('webappname'), parameters('resourcenamepostfix'))]",
         "webappserviceplanname": "[concat(parameters('resourcenameprefix'), parameters('webappserviceplanname'), parameters('resourcenamepostfix'))]",
         "appinsightsname": "[concat(parameters('resourcenameprefix'), parameters('appinsightsname'), parameters('resourcenamepostfix'))]",
         "keyvaultname": "[concat(parameters('resourcenameprefix'), parameters('keyvaultname'), parameters('resourcenamepostfix'))]",
@@ -77,7 +77,7 @@
         "apiMGMTSubnetRef": "[concat(variables('vnetId'), '/subnets/', 'ApiMgmtSubnet')]",
         "appSubnetRef": "[concat(variables('vnetId'), '/subnets/', 'AppTier')]",
         "applicationGatewayId": "[resourceId('Microsoft.Network/applicationGateways', variables('applicationGatewayName'))]",
-        "appgwprivateip": "10.0.1.200",
+        "appgwprivateip": "10.0.1.200"
     },
     "resources": [
         {
@@ -110,20 +110,22 @@
             "identity": {
                 "type": "SystemAssigned"
             },
-            "resources": [{
-                "name": "virtualNetwork",
-                "type": "config",
-                "apiVersion": "2018-02-01",
-                "location": "westeurope",
-                "dependsOn": [
-                    "[concat('Microsoft.Web/sites/', variables('webappname'))]",
-                    "[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
-                ],
-                "properties": {
-                    "subnetResourceId": "[variables('appSubnetRef')]",
-                    "swiftSupported": true
+            "resources": [
+                {
+                    "name": "virtualNetwork",
+                    "type": "config",
+                    "apiVersion": "2018-02-01",
+                    "location": "westeurope",
+                    "dependsOn": [
+                        "[concat('Microsoft.Web/sites/', variables('webappname'))]",
+                        "[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
+                    ],
+                    "properties": {
+                        "subnetResourceId": "[variables('appSubnetRef')]",
+                        "swiftSupported": true
+                    }
                 }
-            }]
+            ]
         },
         {
             "type": "Microsoft.Web/sites/config",
