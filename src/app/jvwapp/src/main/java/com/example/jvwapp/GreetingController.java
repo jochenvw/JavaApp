@@ -1,5 +1,7 @@
 package com.example.jvwapp;
 
+import java.io.File;
+import java.nio.file.Files;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.concurrent.atomic.AtomicLong;
@@ -10,7 +12,8 @@ import com.microsoft.azure.credentials.AppServiceMSICredentials;
 import com.microsoft.azure.keyvault.KeyVaultClient;
 import com.microsoft.azure.keyvault.models.SecretBundle;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,7 +23,12 @@ public class GreetingController {
 
 	TelemetryClient telemetryClient = new TelemetryClient();
 
-	private static final String template = "Hello, %s!";
+	@Value("${jvw.whatever}")
+	private String greetingTemplate;
+
+	@Value("${jvw.file}")
+	private String filename;
+
 	private final AtomicLong counter = new AtomicLong();
 
 	@GetMapping("/greeting")
@@ -29,7 +37,7 @@ public class GreetingController {
 			throw new Exception("Sure ....");
 		}
 
-		return new Greeting(counter.incrementAndGet(), String.format(template, name));
+		return new Greeting(counter.incrementAndGet(), String.format(greetingTemplate, name));
 	}
 
 	@GetMapping("/secret")
@@ -52,5 +60,19 @@ public class GreetingController {
 		new com.microsoft.applicationinsights.telemetry.Duration(0, 0, 0, 0, timeElapsed), true);
 
 		return new Greeting(counter.incrementAndGet(), String.format("Vault secret value is %s!", bundle.value()));
+	}
+
+
+	@GetMapping("/file")
+	public Greeting file(@RequestParam(value = "name", defaultValue = "JohnDoe") String name) throws Exception {
+		File file = ResourceUtils.getFile(filename);
+		Boolean fileExists = file.exists();
+		System.out.println("File Found : " + fileExists);
+
+		String content = new String(Files.readAllBytes(file.toPath()));
+		if(!fileExists) {
+			throw new Exception("Unable to find file " + filename);
+		}
+		return new Greeting(counter.incrementAndGet(), String.format(content, name));
 	}
 }
