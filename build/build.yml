@@ -83,8 +83,6 @@ stages:
     value: 'application-resources.json'
   - name: 'armtemplateparams'
     value: 'parameters.test.json'
-  - name: 'system.debug'
-    value: 'true'
   jobs:
   - job:
     displayName: 'Downloading artifacts'
@@ -126,7 +124,7 @@ stages:
     - task: AzureAppServiceSettings@1
       displayName: 'Update WebApp settings with AppInsights instrumentation key'
       enabled: false
-     inputs:
+      inputs:
         azureSubscription: '$(serviceconnection)'
         appName: '$(arm_webappname)'
         resourceGroupName: '$(resourcegroupname)'
