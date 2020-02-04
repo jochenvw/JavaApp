@@ -129,7 +129,7 @@
         },
         {
             "type": "Microsoft.Web/sites/config",
-            "apiVersion": "2018-11-01",
+            "apiVersion": "2019-08-01",
             "name": "[concat(variables('webappname'), '/web')]",
             "location": "West Europe",
             "dependsOn": [
