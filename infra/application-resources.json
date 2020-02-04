@@ -242,9 +242,9 @@
                     "name": "Premium",
                     "family": "A"
                 },
-                "enableSoftDelete": false,
+                "enableSoftDelete": true,
                 "softDeleteRetentionInDays": 90,
-                "enablePurgeProtection": false,
+                "enablePurgeProtection": true,
                 "networkAcls": {
                     "defaultAction": "allow",
                     "bypass": "AzureServices",
@@ -494,7 +494,7 @@
                     ],
                     "properties": {
                         "loggerType": "applicationInsights",
-                        "resourceId": "[reference(resourceId('Microsoft.Insights/components', variables('appinsightsname')), '2018-05-01-preview').Id]",
+                        "resourceId": "[resourceId('Microsoft.Insights/components', variables('appinsightsname'))]",
                         "credentials": {
                             "instrumentationKey": "[reference(resourceId('Microsoft.Insights/components', variables('appinsightsname')), '2018-05-01-preview').InstrumentationKey]"
                         }
