@@ -1,10 +1,14 @@
 package com.example.jvwapp;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
 
 import com.microsoft.applicationinsights.TelemetryClient;
 import com.microsoft.azure.AzureEnvironment;
@@ -12,10 +16,8 @@ import com.microsoft.azure.credentials.AppServiceMSICredentials;
 import com.microsoft.azure.keyvault.KeyVaultClient;
 import com.microsoft.azure.keyvault.models.SecretBundle;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,9 +27,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class GreetingController {
 
 	TelemetryClient telemetryClient = new TelemetryClient();
-
-	@Autowired
-	ResourceLoader resourceLoader;
 
 	@Value("${jvw.whatever}")
 	private String greetingTemplate;
@@ -56,30 +55,24 @@ public class GreetingController {
 		// for the identity of the web app
 		AppServiceMSICredentials credentials = new AppServiceMSICredentials(AzureEnvironment.AZURE);
 		KeyVaultClient keyVaultClient = new KeyVaultClient(credentials);
-		SecretBundle bundle = keyVaultClient.getSecret(keyVaultEndpoint,name);
+		SecretBundle bundle = keyVaultClient.getSecret(keyVaultEndpoint, name);
 
 		// Track dependency call with application insights - which should
 		// show up in the application map
 		Instant finish = Instant.now();
 		int timeElapsed = (int) Duration.between(start, finish).toMillis();
 		telemetryClient.trackDependency("KeyVault", "GetSecret",
-		new com.microsoft.applicationinsights.telemetry.Duration(0, 0, 0, 0, timeElapsed), true);
+				new com.microsoft.applicationinsights.telemetry.Duration(0, 0, 0, 0, timeElapsed), true);
 
 		return new Greeting(counter.incrementAndGet(), String.format("Vault secret value is %s!", bundle.value()));
 	}
 
-
 	@GetMapping("/file")
 	public Greeting file(@RequestParam(value = "name", defaultValue = "JohnDoe") String name) throws Exception {
-		Resource resource = resourceLoader.getResource(filename);
-		File file = resource.getFile();
-		Boolean fileExists = file.exists();
-		System.out.println("File Found : " + fileExists);
-
-		String content = new String(Files.readAllBytes(file.toPath()));
-		if(!fileExists) {
-			throw new Exception("Unable to find file " + filename);
+		InputStream resource = new ClassPathResource(filename).getInputStream();
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(resource))) {
+			String content = reader.lines().collect(Collectors.joining("\n"));
+			return new Greeting(counter.incrementAndGet(), String.format(content, name));
 		}
-		return new Greeting(counter.incrementAndGet(), String.format(content, name));
 	}
 }
