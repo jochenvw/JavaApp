@@ -12,7 +12,10 @@ import com.microsoft.azure.credentials.AppServiceMSICredentials;
 import com.microsoft.azure.keyvault.KeyVaultClient;
 import com.microsoft.azure.keyvault.models.SecretBundle;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,6 +25,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class GreetingController {
 
 	TelemetryClient telemetryClient = new TelemetryClient();
+
+	@Autowired
+	ResourceLoader resourceLoader;
 
 	@Value("${jvw.whatever}")
 	private String greetingTemplate;
@@ -65,7 +71,8 @@ public class GreetingController {
 
 	@GetMapping("/file")
 	public Greeting file(@RequestParam(value = "name", defaultValue = "JohnDoe") String name) throws Exception {
-		File file = ResourceUtils.getFile(filename);
+		Resource resource = resourceLoader.getResource(filename);
+		File file = resource.getFile();
 		Boolean fileExists = file.exists();
 		System.out.println("File Found : " + fileExists);
 
