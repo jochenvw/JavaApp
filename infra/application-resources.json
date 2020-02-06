@@ -97,9 +97,10 @@
                         {
                             "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
                             "value": "-key-goes-here"
-                        },{
+                        },
+                        {
                             "name": "COSMOSMONGOCONNECTIONSTRING",
-                            "value": "[concat('@Microsoft.KeyVault(SecretUri=', reference(resourceId('Microsoft.KeyVault/vaults/secrets', parameters('keyvaultname'), 'cosmosmongoconnectionstring')).secretUriWithVersion, ')')]"
+                            "value": "[concat('@Microsoft.KeyVault(SecretUri=', reference(resourceId('Microsoft.KeyVault/vaults/secrets', variables('keyvaultname'), 'cosmosmongoconnectionstring')).secretUriWithVersion, ')')]"
                         }
                     ],
                     "linuxFxVersion": "JAVA|8-jre8",
@@ -210,17 +211,12 @@
             }
         },
         {
-            "apiVersion": "2019-09-01",
-            "name": "[variables('keyvaultname')]",
-            "location": "westeurope",
-            "type": "Microsoft.KeyVault/vaults",
+            "type": "Microsoft.KeyVault/vaults/accessPolicies",
+            "name": "[concat(variables('keyVaultName'), '/add')]",
+            "apiVersion": "2018-02-14",
             "properties": {
-                "enabledForDeployment": false,
-                "enabledForTemplateDeployment": true,
-                "enabledForDiskEncryption": false,
-                "enableRbacAuthorization": false,
                 "accessPolicies": [
-                    {
+    {
                         "objectId": "[reference(resourceId('Microsoft.Web/sites', variables('webappname')), '2019-08-01', 'Full').identity.principalId]",
                         "tenantId": "[subscription().tenantId]",
                         "permissions": {
@@ -234,7 +230,20 @@
                         },
                         "applicationId": null
                     }
-                ],
+                ]
+            }
+        },
+        {
+            "apiVersion": "2019-09-01",
+            "name": "[variables('keyvaultname')]",
+            "location": "westeurope",
+            "type": "Microsoft.KeyVault/vaults",
+            "properties": {
+                "enabledForDeployment": false,
+                "enabledForTemplateDeployment": true,
+                "enabledForDiskEncryption": false,
+                "enableRbacAuthorization": false,
+                "accessPolicies": [],
                 "tenantId": "[subscription().tenantId]",
                 "sku": {
                     "name": "Premium",
@@ -258,17 +267,13 @@
             ]
         },
         {
-            "name": "cosmosmongoconnectionstring",
+            "name": "[concat(variables('keyvaultname'),'/cosmosmongoconnectionstring')]",
             "type": "Microsoft.KeyVault/vaults/secrets",
             "apiVersion": "2018-02-14",
             "tags": {
             },
             "properties": {
-                "value": "[concat('mongodb://', parameters('cosmosdbaccount'), ':', listKeys(resourceId('Microsoft.DocumentDb/databaseAccounts', parameters('cosmosdbaccount')), '2015-04-08').primaryMasterKey, '@', parameters('cosmosdbaccount'), '.documents.azure.com:10250/?ssl=true')]",
-                "contentType": "string",
-                "attributes": {
-                    "enabled": true
-                }
+                "value": "[concat('mongodb://', variables('cosmosdbaccount'), ':', listKeys(resourceId('Microsoft.DocumentDb/databaseAccounts', variables('cosmosdbaccount')), '2015-04-08').primaryMasterKey, '@', variables('cosmosdbaccount'), '.documents.azure.com:10250/?ssl=true')]",
             },
             "dependsOn": [
                 "[concat('Microsoft.KeyVault/vaults/', variables('keyvaultname'))]",
