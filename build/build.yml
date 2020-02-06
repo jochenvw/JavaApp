@@ -96,7 +96,7 @@ stages:
 
     - task: AzureResourceManagerTemplateDeployment@3
       displayName: 'Deploy Azure Resources'
-      enabled: false
+      enabled: true
       inputs:
         deploymentScope: 'Resource Group'
         azureResourceManagerConnection: '$(serviceconnection)'
@@ -112,7 +112,7 @@ stages:
 
     - task: PowerShell@2
       displayName: 'Make ARM output variables available for subsequent steps as $(arm_<whatever>)'
-      enabled: false
+      enabled: true
       inputs:
         targetType: 'inline'
         script: |
@@ -123,7 +123,7 @@ stages:
 
     - task: AzureAppServiceSettings@1
       displayName: 'Update WebApp settings with AppInsights instrumentation key'
-      enabled: false
+      enabled: true
       inputs:
         azureSubscription: '$(serviceconnection)'
         appName: '$(arm_webappname)'
