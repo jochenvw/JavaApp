@@ -95,7 +95,7 @@ stages:
         downloadPath: '$(System.ArtifactsDirectory)'
 
   - job:
-    displayName: 'Deploy resources'
+    displayName: 'Deploy ARM template and configure resources'
     steps:
     - task: AzureResourceManagerTemplateDeployment@3
       displayName: 'Deploy Azure Resources'
@@ -157,7 +157,7 @@ stages:
         replaceExistingArchive: true
 
   - job:
-    displayName: 'Deploy Application'
+    displayName: 'Deploy Spring Boot App'
     steps:
     - task: AzureRmWebAppDeployment@4
       displayName: 'Deploy application package to WebApp'
