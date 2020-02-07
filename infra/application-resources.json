@@ -327,6 +327,9 @@
                                 },
                                 {
                                     "service": "Microsoft.Storage"
+                                },
+                                                                {
+                                    "service": "Microsoft.Web/serverFarms"
                                 }
                             ]
                         }
