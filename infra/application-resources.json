@@ -573,6 +573,43 @@
             ]
         },
         {
+            "type": "Microsoft.ApiManagement/service/apis",
+            "apiVersion": "2019-01-01",
+            "name": "[concat(variables('apimgmtname'), '/api')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.ApiManagement/service', concat(variables('apimgmtname')))]"
+            ],
+            "properties": {
+                "displayName": "api",
+                "apiRevision": "1",
+                "subscriptionRequired": true,
+                "serviceUrl": "[concat('http://', variables('appgwprivateip'))]",
+                "protocols": [
+                    "https"
+                ],
+                "isCurrent": true,
+                "path": "/"
+            }
+        },
+        {
+            "type": "Microsoft.ApiManagement/service/apis/operations",
+            "apiVersion": "2019-01-01",
+            "name": "[concat(variables('apimgmtname'), '/api/get')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.ApiManagement/service/apis', variables('apimgmtname'), 'api')]",
+                "[resourceId('Microsoft.ApiManagement/service', variables('apimgmtname'))]"
+            ],
+            "properties": {
+                "displayName": "GET",
+                "method": "GET",
+                "urlTemplate": "/greeting",
+                "templateParameters": [
+                ],
+                "responses": [
+                ]
+            }
+        },
+        {
             "apiVersion": "2019-12-12",
             "kind": "GlobalDocumentDB",
             "type": "Microsoft.DocumentDb/databaseAccounts",
