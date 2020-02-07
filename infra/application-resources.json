@@ -273,7 +273,7 @@
             "tags": {
             },
             "properties": {
-                "value": "[concat('mongodb://', variables('cosmosdbaccount'), ':', listKeys(resourceId('Microsoft.DocumentDb/databaseAccounts', variables('cosmosdbaccount')), '2015-04-08').primaryMasterKey, '@', variables('cosmosdbaccount'), '.documents.azure.com:10250/?ssl=true')]",
+                "value": "[concat('mongodb://', variables('cosmosdbaccount'), ':', listKeys(resourceId('Microsoft.DocumentDb/databaseAccounts', variables('cosmosdbaccount')), '2015-04-08').primaryMasterKey, '@', variables('cosmosdbaccount'), '.documents.azure.com:10250/?ssl=true')]"
             },
             "dependsOn": [
                 "[concat('Microsoft.KeyVault/vaults/', variables('keyvaultname'))]",
@@ -328,7 +328,7 @@
                                 {
                                     "service": "Microsoft.Storage"
                                 },
-                                                                {
+                                {
                                     "service": "Microsoft.Web"
                                 }
                             ]

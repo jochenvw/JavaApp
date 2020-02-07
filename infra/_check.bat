@@ -1,0 +1,1 @@
+jsonlint -q ./application-resources.json
