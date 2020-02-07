@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class HealthController {
-	@GetMapping("/health")
+public class InfoController {
+	@GetMapping("/info")
 	public ResponseEntity greeting() throws Exception {
 		return ResponseEntity.ok("All good here!");
 	}

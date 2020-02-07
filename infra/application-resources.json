@@ -216,7 +216,7 @@
             "apiVersion": "2018-02-14",
             "properties": {
                 "accessPolicies": [
-    {
+                    {
                         "objectId": "[reference(resourceId('Microsoft.Web/sites', variables('webappname')), '2019-08-01', 'Full').identity.principalId]",
                         "tenantId": "[subscription().tenantId]",
                         "permissions": {
@@ -243,7 +243,8 @@
                 "enabledForTemplateDeployment": true,
                 "enabledForDiskEncryption": false,
                 "enableRbacAuthorization": false,
-                "accessPolicies": [],
+                "accessPolicies": [
+                ],
                 "tenantId": "[subscription().tenantId]",
                 "sku": {
                     "name": "Premium",
@@ -430,7 +431,10 @@
                             "Protocol": "Https",
                             "cookieBasedAffinity": "Disabled",
                             "requestTimeout": 20,
-                            "pickHostNameFromBackendAddress": true
+                            "pickHostNameFromBackendAddress": true,
+                            "probe": {
+                                "id": "[concat(resourceId('Microsoft.Network/applicationGateways', variables('applicationGatewayName')), '/probes/appserviceinfoprobe')]"
+                            }
                         }
                     }
                 ],
@@ -470,6 +474,20 @@
                 "sslCertificates": [
                 ],
                 "probes": [
+                    {
+                        "name": "appserviceinfoprobe",
+                        "properties": {
+                            "protocol": "Https",
+                            "path": "/info",
+                            "interval": 30,
+                            "timeout": 30,
+                            "unhealthyThreshold": 3,
+                            "pickHostNameFromBackendHttpSettings": true,
+                            "minServers": 0,
+                            "match": {
+                            }
+                        }
+                    }
                 ],
                 "autoscaleConfiguration": {
                     "minCapacity": "0",
