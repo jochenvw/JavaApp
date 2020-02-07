@@ -317,19 +317,19 @@
                                 {
                                     "service": "Microsoft.Web",
                                     "locations": [
-                                        "*"
+                                        "westeurope"
                                     ]
                                 },
                                 {
                                     "service": "Microsoft.KeyVault",
                                     "locations": [
-                                        "*"
+                                        "westeurope"
                                     ]
                                 },
                                 {
                                     "service": "Microsoft.AzureCosmosDB",
                                     "locations": [
-                                        "*"
+                                        "westeurope"
                                     ]
                                 },
                                 {
@@ -343,6 +343,14 @@
                                     "locations": [
                                         "westeurope"
                                     ]
+                                }
+                            ],
+                            "delegations": [
+                                {
+                                    "name": "delegation",
+                                    "properties": {
+                                        "serviceName": "Microsoft.Web/serverfarms"
+                                    }
                                 }
                             ]
                         }
