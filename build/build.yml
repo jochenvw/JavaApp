@@ -93,8 +93,10 @@ stages:
         artifactName: 'drop'
         downloadType: 'single'
         downloadPath: '$(System.ArtifactsDirectory)'
+
   - job:
     displayName: 'Deploy resources'
+    steps:
     - task: AzureResourceManagerTemplateDeployment@3
       displayName: 'Deploy Azure Resources'
       enabled: true
@@ -156,6 +158,7 @@ stages:
 
     - job:
     displayName: 'Deploy Application'
+    steps:
     - task: AzureRmWebAppDeployment@4
       displayName: 'Deploy application package to WebApp'
       inputs:
