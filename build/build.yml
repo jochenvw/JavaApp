@@ -24,7 +24,7 @@ stages:
     displayName: 'Prepping JAVA API app'
     steps:
     - task: Maven@3
-      displayName: 'Maven package'
+      displayName: 'Maven -Dmaven.test.skip package'
       inputs:
         mavenPomFile: '$(System.DefaultWorkingDirectory)/src/app/jvwapp/pom.xml'
         mavenOptions: '-Xmx3072m'
