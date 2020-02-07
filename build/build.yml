@@ -93,7 +93,8 @@ stages:
         artifactName: 'drop'
         downloadType: 'single'
         downloadPath: '$(System.ArtifactsDirectory)'
-
+  - job:
+    displayName: 'Deploy resources'
     - task: AzureResourceManagerTemplateDeployment@3
       displayName: 'Deploy Azure Resources'
       enabled: true
@@ -153,6 +154,8 @@ stages:
         archiveFile: '$(Build.ArtifactStagingDirectory)/app_package.zip'
         replaceExistingArchive: true
 
+    - job:
+    displayName: 'Deploy Application'
     - task: AzureRmWebAppDeployment@4
       displayName: 'Deploy application package to WebApp'
       inputs:
