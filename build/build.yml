@@ -136,7 +136,7 @@ stages:
             },
             {
               "name": "JAVA_OPTS",
-              "value": "-javaagent:/home/site/wwwroot/applicationinsights-agent-2.5.1.jar"
+              "value": "Dspring.profiles.active=azuretest -javaagent:/home/site/wwwroot/applicationinsights-agent-2.5.1.jar"
             },
             {
               "name": "KEYVAULTURL",
