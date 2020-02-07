@@ -47,6 +47,10 @@
         "apimgmtorg": {
             "type": "string"
         },
+        "logworkspacename": {
+            "type": "string",
+            "defaultValue":"-logspace"
+        },
         "resourcenameprefix": {
             "type": "string",
             "defaultValue": "javademoapp-test"
@@ -66,6 +70,7 @@
         "publicIpAddressName": "[concat(parameters('resourcenameprefix'), parameters('publicIpAddressName'), parameters('resourcenamepostfix'))]",
         "apimgmtname": "[concat(parameters('resourcenameprefix'), parameters('apimgmtname'), parameters('resourcenamepostfix'))]",
         "cosmosdbaccount": "[concat(parameters('resourcenameprefix'), parameters('cosmosdbaccount'), parameters('resourcenamepostfix'))]",
+        "logworkspacename": "[concat(parameters('resourcenameprefix'), parameters('logworkspacename'), parameters('resourcenamepostfix'))]",
 
         "publicIpAddressNameDomainNameLabel": "[parameters('publicIpAddressNameDomainNameLabel')]",
         "apimgmtadminmail": "[parameters('apimgmtadminmail')]",
@@ -653,6 +658,20 @@
             "tags": {
                 "defaultExperience": "Core (SQL)",
                 "hidden-cosmos-mmspecial": ""
+            }
+        },
+        {
+            "type": "Microsoft.OperationalInsights/workspaces",
+            "apiVersion": "2017-03-15-preview",
+            "name": "[variables('logworkspacename')]",
+            "location": "westeurope",
+            "properties": {
+                "sku": {
+                    "name": "pergb2018"
+                },
+                "features": {
+                    "searchVersion": "1"
+                }
             }
         }
     ],
