@@ -314,22 +314,34 @@
                             "addressPrefix": "10.0.2.0/24",
                             "serviceEndpoints": [
                                 {
-                                    "service": "Microsoft.Web"
+                                    "service": "Microsoft.Web",
+                                    "locations": [
+                                        "*"
+                                    ]
                                 },
                                 {
-                                    "service": "Microsoft.KeyVault"
+                                    "service": "Microsoft.KeyVault",
+                                    "locations": [
+                                        "*"
+                                    ]
                                 },
                                 {
-                                    "service": "Microsoft.AzureCosmosDB"
+                                    "service": "Microsoft.AzureCosmosDB",
+                                    "locations": [
+                                        "*"
+                                    ]
                                 },
                                 {
-                                    "service": "Microsoft.Sql"
+                                    "service": "Microsoft.Sql",
+                                    "locations": [
+                                        "westeurope"
+                                    ]
                                 },
                                 {
-                                    "service": "Microsoft.Storage"
-                                },
-                                {
-                                    "service": "Microsoft.Web"
+                                    "service": "Microsoft.Storage",
+                                    "locations": [
+                                        "westeurope"
+                                    ]
                                 }
                             ]
                         }
