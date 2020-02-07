@@ -156,7 +156,7 @@ stages:
         archiveFile: '$(Build.ArtifactStagingDirectory)/app_package.zip'
         replaceExistingArchive: true
 
-    - job:
+  - job:
     displayName: 'Deploy Application'
     steps:
     - task: AzureRmWebAppDeployment@4
