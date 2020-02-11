@@ -106,6 +106,10 @@
                         {
                             "name": "COSMOSMONGOCONNECTIONSTRING",
                             "value": "[concat('@Microsoft.KeyVault(SecretUri=', reference(resourceId('Microsoft.KeyVault/vaults/secrets', variables('keyvaultname'), 'cosmosmongoconnectionstring')).secretUriWithVersion, ')')]"
+                        },
+                        {
+                            "name": "JAVA_OPTS",
+                            "value": "-Dspring.profiles.active=azuretest -javaagent:/home/site/wwwroot/applicationinsights-agent-2.6.0-BETA.2.jar"
                         }
                     ],
                     "linuxFxVersion": "JAVA|8-jre8",
@@ -228,7 +232,8 @@
                             "keys": [
                             ],
                             "secrets": [
-                                "Get"
+                                "Get",
+                                "List"
                             ],
                             "certificates": [
                             ]
