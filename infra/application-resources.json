@@ -630,7 +630,7 @@
         {
             "type": "Microsoft.ApiManagement/service/apis/policies",
             "apiVersion": "2019-01-01",
-            "name": "[concat(parameters('service_demo_test_apimgmt_we_name'), '/api/policy')]",
+            "name": "[concat(variables('apimgmtname'), '/api/policy')]",
             "dependsOn": [
                 "[resourceId('Microsoft.ApiManagement/service/apis', variables('apimgmtname'), 'api')]",
                 "[resourceId('Microsoft.ApiManagement/service', variables('apimgmtname'))]"
