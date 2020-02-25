@@ -31,6 +31,9 @@ public class GreetingController {
 	@Value("${jvw.keyvaultsecret}")
 	private String keyVaultSecret;
 
+	@Value("${msisecret}")
+	private String msisecret;
+
 	private final AtomicLong counter = new AtomicLong();
 
 	@GetMapping("/greeting")
@@ -44,7 +47,8 @@ public class GreetingController {
 
 	@GetMapping("/secret")
 	public Greeting secret(@RequestParam(value = "name", defaultValue = "sample") String name) throws Exception {
-		return new Greeting(counter.incrementAndGet(), String.format("Vault secret value is %s!", keyVaultSecret));
+		return new Greeting(counter.incrementAndGet(), String.format("Vault secret value is %s!", msisecret));
+		//return new Greeting(counter.incrementAndGet(), String.format("Vault secret value is %s!", keyVaultSecret));
 	}
 
 	@GetMapping("/file")

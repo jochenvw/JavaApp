@@ -110,6 +110,10 @@
                         {
                             "name": "JAVA_OPTS",
                             "value": "-Dspring.profiles.active=azuretest -javaagent:/home/site/wwwroot/applicationinsights-agent-2.6.0-BETA.2.jar"
+                        },
+                        {
+                            "name": "KEYVAULTURI",
+                            "value": "[reference(resourceId('Microsoft.KeyVault/vaults', variables('keyvaultname')), '2019-09-01').vaultUri]"
                         }
                     ],
                     "linuxFxVersion": "JAVA|8-jre8",
@@ -292,6 +296,19 @@
             ]
         },
         {
+            "name": "[concat(variables('keyvaultname'),'/msisecret')]",
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "apiVersion": "2018-02-14",
+            "tags": {
+            },
+            "properties": {
+                "value": "this-is-the-msi-secret"
+            },
+            "dependsOn": [
+                "[concat('Microsoft.KeyVault/vaults/', variables('keyvaultname'))]",
+                "[concat('Microsoft.DocumentDb/databaseAccounts/', variables('cosmosdbaccount'))]"
+            ]
+        },        {
             "name": "[variables('virtualNetworkName')]",
             "type": "Microsoft.Network/VirtualNetworks",
             "apiVersion": "2019-09-01",
