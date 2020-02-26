@@ -75,6 +75,8 @@
         "publicIpAddressNameDomainNameLabel": "[parameters('publicIpAddressNameDomainNameLabel')]",
         "apimgmtadminmail": "[parameters('apimgmtadminmail')]",
         "apimgmtorg": "[parameters('apimgmtorg')]",
+        
+        "managed-id-name": "jvw-managed-id",
 
         "vnetId": "[resourceId('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]",
         "publicIPRef": "[resourceId('Microsoft.Network/publicIPAddresses/', variables('publicIpAddressName'))]",
@@ -143,6 +145,12 @@
                     }
                 }
             ]
+        },
+        {
+            "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
+            "name": "[variables('managed-id-name')]",
+            "apiVersion": "2018-11-30",
+            "location": "[resourceGroup().location]"
         },
         {
             "type": "Microsoft.Web/sites/config",
