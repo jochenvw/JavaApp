@@ -900,6 +900,44 @@
                     }
                 ]
             }
+        },
+        {
+            "type": "microsoft.insights/scheduledqueryrules",
+            "apiVersion": "2018-04-16",
+            "name": "Check for non HTTP 200 responses",
+            "location": "westeurope",
+            "dependsOn": [
+                "[resourceId('microsoft.insights/components', variables('appinsightsname'))]",
+                "[resourceId('microsoft.insights/actionGroups', 'incidentmgmt-system-notifier')]"
+            ],
+            "properties": {
+                "description": "[concat('Check for non HTTP 200 responses', ' description')]",
+                "enabled": "true",
+                "source": {
+                    "query": "requests\n| where resultCode != 200",
+                    "authorizedResources": [
+                    ],
+                    "dataSourceId": "[resourceId('microsoft.insights/components', variables('appinsightsname'))]",
+                    "queryType": "ResultCount"
+                },
+                "schedule": {
+                    "frequencyInMinutes": 5,
+                    "timeWindowInMinutes": 5
+                },
+                "action": {
+                    "severity": "3",
+                    "aznsAction": {
+                        "actionGroup": [
+                            "[resourceId('microsoft.insights/actionGroups', 'incidentmgmt-system-notifier')]"
+                        ]
+                    },
+                    "trigger": {
+                        "thresholdOperator": "GreaterThan",
+                        "threshold": 0
+                    },
+                    "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.Microsoft.AppInsights.Nexus.DataContracts.Resources.ScheduledQueryRules.AlertingAction"
+                }
+            }
         }
     ],
     "outputs": {
