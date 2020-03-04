@@ -330,7 +330,7 @@
             "dependsOn": [
             ],
             "resources": [
-                   {
+                {
                     "type": "providers/diagnosticSettings",
                     "name": "[concat('Microsoft.Insights/', 'log-analytics-pusher')]",
                     "apiVersion": "2017-05-01-preview",
@@ -354,7 +354,7 @@
                         "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logworkspacename'))]",
                         "[concat('Microsoft.KeyVault/vaults/', variables('keyvaultname'))]"
                     ]
-                },
+                }
             ]
         },
         {
@@ -461,7 +461,34 @@
                     }
                 ],
                 "enableDdosProtection": false
-            }
+            },
+            "resources": [
+                {
+                    "type": "providers/diagnosticSettings",
+                    "name": "[concat('Microsoft.Insights/', 'log-analytics-pusher')]",
+                    "apiVersion": "2017-05-01-preview",
+                    "properties": {
+                        "name": "log-analytics-pusher",
+                        "workspaceId": "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logworkspacename'))]",
+                        "logs": [
+                            {
+                                "category": "VMProtectionAlerts",
+                                "enabled": true
+                            }
+                        ],
+                        "metrics": [
+                            {
+                                "category": "AllMetrics",
+                                "enabled": true
+                            }
+                        ]
+                    },
+                    "dependsOn": [
+                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logworkspacename'))]",
+                        "[concat('Microsoft.Network/VirtualNetworks/', variables('virtualNetworkName'))]"
+                    ]
+                }
+            ]
         },
         {
             "name": "[variables('applicationGatewayName')]",
