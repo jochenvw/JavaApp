@@ -75,7 +75,7 @@
         "publicIpAddressNameDomainNameLabel": "[parameters('publicIpAddressNameDomainNameLabel')]",
         "apimgmtadminmail": "[parameters('apimgmtadminmail')]",
         "apimgmtorg": "[parameters('apimgmtorg')]",
-        
+
         "managed-id-name": "jvw-managed-id",
 
         "vnetId": "[resourceId('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]",
@@ -143,7 +143,48 @@
                         "subnetResourceId": "[variables('appSubnetRef')]",
                         "swiftSupported": true
                     }
-                }
+                },
+                {
+                    "type": "providers/diagnosticSettings",
+                    "name": "[concat('Microsoft.Insights/', 'log-analytics-pusher')]",
+                    "apiVersion": "2017-05-01-preview",
+                    "properties": {
+                        "name": "log-analytics-pusher",
+                        "workspaceId": "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logworkspacename'))]",
+                        "logs": [
+                            {
+                                "category": "AppServiceHTTPLogs",
+                                "enabled": true
+                            },
+                            {
+                                "category": "AppServiceConsoleLogs",
+                                "enabled": true
+                            },
+                            {
+                                "category": "AppServiceAppLogs",
+                                "enabled": true
+                            },
+                            {
+                                "category": "AppServiceFileAuditLogs",
+                                "enabled": true
+                            },
+                            {
+                                "category": "AppServiceAuditLogs",
+                                "enabled": true
+                            }
+                        ],
+                        "metrics": [
+                            {
+                                "category": "AllMetrics",
+                                "enabled": true
+                            }
+                        ]
+                    },
+                    "dependsOn": [
+                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logworkspacename'))]",
+                        "[concat('Microsoft.Web/sites/', variables('webappname'))]"
+                    ]
+                },
             ]
         },
         {
@@ -316,7 +357,8 @@
                 "[concat('Microsoft.KeyVault/vaults/', variables('keyvaultname'))]",
                 "[concat('Microsoft.DocumentDb/databaseAccounts/', variables('cosmosdbaccount'))]"
             ]
-        },        {
+        },
+        {
             "name": "[variables('virtualNetworkName')]",
             "type": "Microsoft.Network/VirtualNetworks",
             "apiVersion": "2019-09-01",
