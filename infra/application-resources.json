@@ -642,7 +642,42 @@
                     "policyType": "Predefined",
                     "policyName": "AppGwSslPolicy20170401S"
                 }
-            }
+            },
+            "resources": [
+                {
+                    "type": "providers/diagnosticSettings",
+                    "name": "[concat('Microsoft.Insights/', 'log-analytics-pusher')]",
+                    "apiVersion": "2017-05-01-preview",
+                    "properties": {
+                        "name": "log-analytics-pusher",
+                        "workspaceId": "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logworkspacename'))]",
+                        "logs": [
+                            {
+                                "category": "ApplicationGatewayAccessLog",
+                                "enabled": true
+                            },
+                            {
+                                "category": "ApplicationGatewayPerformanceLog",
+                                "enabled": true
+                            },
+                            {
+                                "category": "ApplicationGatewayFirewallLog",
+                                "enabled": true
+                            }
+                        ],
+                        "metrics": [
+                            {
+                                "category": "AllMetrics",
+                                "enabled": true
+                            }
+                        ]
+                    },
+                    "dependsOn": [
+                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logworkspacename'))]",
+                        "[concat('Microsoft.Network/applicationGateways/', variables('applicationGatewayName'))]"
+                    ]
+                }
+            ]
         },
         {
             "apiVersion": "2019-02-01",
