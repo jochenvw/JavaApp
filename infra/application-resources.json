@@ -58,6 +58,10 @@
         "resourcenamepostfix": {
             "type": "string",
             "defaultValue": ""
+        },
+        "incident-management-systen-endpoint": {
+            "type": "string",
+            "defaultValue": "http://www.whatever.com"
         }
     },
     "variables": {
@@ -744,7 +748,7 @@
                         }
                     }
                 },
-                   {
+                {
                     "type": "providers/diagnosticSettings",
                     "name": "[concat('Microsoft.Insights/', 'log-analytics-pusher')]",
                     "apiVersion": "2017-05-01-preview",
@@ -879,6 +883,22 @@
                 "features": {
                     "searchVersion": "1"
                 }
+            }
+        },
+        {
+            "type": "Microsoft.Insights/actionGroups",
+            "apiVersion": "2018-03-01",
+            "name": "incidentmgmt-system-notifier",
+            "location": "Global",
+            "properties": {
+                "groupShortName": "incdnt-mgmt",
+                "enabled": true,
+                "webhookReceivers": [
+                    {
+                        "name": "incidentnotifier-endpoint",
+                        "serviceUri": "[parameters('incident-management-systen-endpoint')]"
+                    }
+                ]
             }
         }
     ],
