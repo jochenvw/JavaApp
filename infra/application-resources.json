@@ -743,6 +743,39 @@
                             "samplingType": "fixed"
                         }
                     }
+                },
+                   {
+                    "type": "providers/diagnosticSettings",
+                    "name": "[concat('Microsoft.Insights/', 'log-analytics-pusher')]",
+                    "apiVersion": "2017-05-01-preview",
+                    "properties": {
+                        "name": "log-analytics-pusher",
+                        "workspaceId": "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logworkspacename'))]",
+                        "logs": [
+                            {
+                                "category": "GatewayLogs",
+                                "enabled": true
+                            }
+                        ],
+                        "metrics": [
+                            {
+                                "category": "Gateway Requests",
+                                "enabled": true
+                            },
+                            {
+                                "category": "Capacity",
+                                "enabled": true
+                            },
+                            {
+                                "category": "EventHub Events",
+                                "enabled": true
+                            }
+                        ]
+                    },
+                    "dependsOn": [
+                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logworkspacename'))]",
+                        "[concat('Microsoft.ApiManagement/service/', variables('apimgmtname'))]"
+                    ]
                 }
             ]
         },
