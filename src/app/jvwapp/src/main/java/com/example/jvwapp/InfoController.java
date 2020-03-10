@@ -13,8 +13,8 @@ public class InfoController {
 	@Value("${azure.application-insights.instrumentation-key}")
 	private String appInsightsKey;
 
-	@Value("${my.special.secret}")
-	private String kvSecret;
+	//@Value("${my.special.secret}")
+	//private String kvSecret;
 
 	@GetMapping("/info")
 	public ResponseEntity greeting() throws Exception {
@@ -22,7 +22,7 @@ public class InfoController {
 		response += "App started - with follwing config:" + "\r\n";
 		response += "KV URI" + keyVaultUri + "\r\n";
 		response += "App insights key" + appInsightsKey + "\r\n";
-		response += "KeyVaultSecret" + kvSecret + "\r\n";
+		//response += "KeyVaultSecret" + kvSecret + "\r\n";
 		return ResponseEntity.ok(response);
 	}
 }
