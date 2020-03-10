@@ -13,8 +13,8 @@ public class InfoController {
 	@Value("${azure.application-insights.instrumentation-key}")
 	private String appInsightsKey;
 
-	//@Value("${my.special.secret}")
-	//private String kvSecret;
+	@Value("${my.special.secret}")
+	private String kvSecret;
 
 	@GetMapping("/info")
 	public ResponseEntity greeting() throws Exception {

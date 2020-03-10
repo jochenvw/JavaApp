@@ -367,7 +367,6 @@
             },
             "dependsOn": [
                 "[concat('Microsoft.KeyVault/vaults/', variables('keyvaultname'))]",
-                "[concat('Microsoft.DocumentDb/databaseAccounts/', variables('cosmosdbaccount'))]"
             ]
         },
         {
