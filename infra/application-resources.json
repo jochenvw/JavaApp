@@ -362,6 +362,20 @@
             ]
         },
         {
+            "name": "[concat(variables('keyvaultname'),'/my-special-secret')]",
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "apiVersion": "2018-02-14",
+            "tags": {
+            },
+            "properties": {
+                "value": "whatever-here-is-the-value"
+            },
+            "dependsOn": [
+                "[concat('Microsoft.KeyVault/vaults/', variables('keyvaultname'))]",
+                "[concat('Microsoft.DocumentDb/databaseAccounts/', variables('cosmosdbaccount'))]"
+            ]
+        },
+        {
             "name": "[concat(variables('keyvaultname'),'/cosmosmongoconnectionstring')]",
             "type": "Microsoft.KeyVault/vaults/secrets",
             "apiVersion": "2018-02-14",
