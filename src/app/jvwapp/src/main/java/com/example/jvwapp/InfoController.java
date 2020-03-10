@@ -22,7 +22,7 @@ public class InfoController {
 		response += "App started - with follwing config:" + "\r\n";
 		response += "KV URI" + keyVaultUri + "\r\n";
 		response += "App insights key" + appInsightsKey + "\r\n";
-		//response += "KeyVaultSecret" + kvSecret + "\r\n";
+		response += "KeyVaultSecret" + kvSecret + "\r\n";
 		return ResponseEntity.ok(response);
 	}
 }
