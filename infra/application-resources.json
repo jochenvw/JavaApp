@@ -105,22 +105,6 @@
                 "name": "[variables('webappname')]",
                 "siteConfig": {
                     "appSettings": [
-                        {
-                            "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-                            "value": "[reference(resourceId('Microsoft.Insights/components', variables('appinsightsname')), '2018-05-01-preview').InstrumentationKey]"
-                        },
-                        {
-                            "name": "COSMOSMONGOCONNECTIONSTRING",
-                            "value": "[concat('@Microsoft.KeyVault(SecretUri=', reference(resourceId('Microsoft.KeyVault/vaults/secrets', variables('keyvaultname'), 'cosmosmongoconnectionstring')).secretUriWithVersion, ')')]"
-                        },
-                        {
-                            "name": "JAVA_OPTS",
-                            "value": "-Dspring.profiles.active=azuretest -javaagent:/home/site/wwwroot/applicationinsights-agent-2.6.0-BETA.3.jar"
-                        },
-                        {
-                            "name": "KEYVAULTURI",
-                            "value": "[reference(resourceId('Microsoft.KeyVault/vaults', variables('keyvaultname')), '2019-09-01').vaultUri]"
-                        }
                     ],
                     "linuxFxVersion": "JAVA|8-jre8",
                     "alwaysOn": true
@@ -196,6 +180,17 @@
             "name": "[variables('managed-id-name')]",
             "apiVersion": "2018-11-30",
             "location": "[resourceGroup().location]"
+        },
+        {
+            "name": "[concat(variables('webappname'), '/appsettings')]",
+            "type": "Microsoft.Web/sites/config",
+            "apiVersion": "2019-08-01",
+            "properties": {
+                "APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(resourceId('Microsoft.Insights/components', variables('appinsightsname')), '2018-05-01-preview').InstrumentationKey]",
+                "COSMOSMONGOCONNECTIONSTRING": "[concat('@Microsoft.KeyVault(SecretUri=', reference(resourceId('Microsoft.KeyVault/vaults/secrets', variables('keyvaultname'), 'cosmosmongoconnectionstring')).secretUriWithVersion, ')')]",
+                "JAVA_OPTS": "-Dspring.profiles.active=azuretest -javaagent:/home/site/wwwroot/applicationinsights-agent-2.6.0-BETA.3.jar",
+                "KEYVAULTURI": "[reference(resourceId('Microsoft.KeyVault/vaults', variables('keyvaultname')), '2019-09-01').vaultUri]"
+            }
         },
         {
             "type": "Microsoft.Web/sites/config",
