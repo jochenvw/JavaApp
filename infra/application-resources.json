@@ -107,7 +107,7 @@
                     "appSettings": [
                         {
                             "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-                            "value": "-key-goes-here"
+                            "value": "[reference(resourceId('Microsoft.Insights/components', variables('appinsightsname')), '2018-05-01-preview').InstrumentationKey]"
                         },
                         {
                             "name": "COSMOSMONGOCONNECTIONSTRING",

@@ -122,29 +122,6 @@ stages:
               Write-Host "##vso[task.setvariable variable=arm_$($output.Name)]$($output.Value.value)"
             }
 
-    - task: AzureAppServiceSettings@1
-      displayName: 'Update WebApp settings with AppInsights instrumentation key'
-      enabled: true
-      inputs:
-        azureSubscription: '$(serviceconnection)'
-        appName: '$(arm_webappname)'
-        resourceGroupName: '$(resourcegroupname)'
-        appSettings: |
-          [
-            {
-              "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-              "value": "$(arm_appinsightskey)"
-            },
-            {
-              "name": "JAVA_OPTS",
-              "value": "-Dspring.profiles.active=azuretest -javaagent:/home/site/wwwroot/applicationinsights-agent-2.5.1.jar"
-            },
-            {
-              "name": "KEYVAULTURI",
-              "value": "$(arm_keyvaulturl)"
-            }
-          ]
-
     - task: ArchiveFiles@2
       displayName: 'Zip up application + agent JAR'
       inputs:
