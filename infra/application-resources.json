@@ -366,7 +366,7 @@
                 "value": "whatever-here-is-the-value"
             },
             "dependsOn": [
-                "[concat('Microsoft.KeyVault/vaults/', variables('keyvaultname'))]",
+                "[concat('Microsoft.KeyVault/vaults/', variables('keyvaultname'))]"
             ]
         },
         {
