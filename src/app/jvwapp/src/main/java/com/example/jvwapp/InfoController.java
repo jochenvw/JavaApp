@@ -20,9 +20,9 @@ public class InfoController {
 	public ResponseEntity greeting() throws Exception {
 		String response = "";
 		response += "App started - with follwing config:" + "\r\n";
-		response += "KV URI" + keyVaultUri + "\r\n";
-		response += "App insights key" + appInsightsKey + "\r\n";
-		response += "KeyVaultSecret" + kvSecret + "\r\n";
+		response += "KV URI: " + keyVaultUri + "\r\n";
+		response += "App insights key: " + appInsightsKey + "\r\n";
+		response += "KeyVaultSecret: " + kvSecret + "\r\n";
 		return ResponseEntity.ok(response);
 	}
 }
