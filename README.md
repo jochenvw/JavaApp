@@ -4,8 +4,7 @@ Attempt to automat as much a possible a modern Java App that runs on Azure WebAp
 
 
 ## Build status
-[![Build Status](https://dev.azure.com/jvwdemo/JavaApp/_apis/build/status/jochenvw.JavaApp?branchName=master)](https://dev.azure.com/jvwdemo/JavaApp/_build/latest?definitionId=47&branchName=master)
-
+[![Build Status](https://dev.azure.com/jvwdemo/JavaApp/_apis/build/status/Application%20CI%20Build?branchName=master)](https://dev.azure.com/jvwdemo/JavaApp/_build/latest?definitionId=55&branchName=master)
 
 ## Azure services
 Public traffic will hit the following services:
