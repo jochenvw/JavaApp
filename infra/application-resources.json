@@ -115,7 +115,7 @@
                         },
                         {
                             "name": "JAVA_OPTS",
-                            "value": "-Dspring.profiles.active=azuretest -javaagent:/home/site/wwwroot/applicationinsights-agent-2.6.0-BETA.2.jar"
+                            "value": "-Dspring.profiles.active=azuretest -javaagent:/home/site/wwwroot/applicationinsights-agent-2.6.0-BETA.3.jar"
                         },
                         {
                             "name": "KEYVAULTURI",
