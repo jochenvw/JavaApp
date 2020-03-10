@@ -187,9 +187,10 @@
             "apiVersion": "2019-08-01",
             "properties": {
                 "APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(resourceId('Microsoft.Insights/components', variables('appinsightsname')), '2018-05-01-preview').InstrumentationKey]",
+                "azure_application-insights_instrumentation-key": "[reference(resourceId('Microsoft.Insights/components', variables('appinsightsname')), '2018-05-01-preview').InstrumentationKey]",
+                "azure_keyvault_uri": "[reference(resourceId('Microsoft.KeyVault/vaults', variables('keyvaultname')), '2019-09-01').vaultUri]",
                 "COSMOSMONGOCONNECTIONSTRING": "[concat('@Microsoft.KeyVault(SecretUri=', reference(resourceId('Microsoft.KeyVault/vaults/secrets', variables('keyvaultname'), 'cosmosmongoconnectionstring')).secretUriWithVersion, ')')]",
                 "JAVA_OPTS": "-Dspring.profiles.active=azuretest -javaagent:/home/site/wwwroot/applicationinsights-agent-2.6.0-BETA.3.jar",
-                "KEYVAULTURI": "[reference(resourceId('Microsoft.KeyVault/vaults', variables('keyvaultname')), '2019-09-01').vaultUri]"
             }
         },
         {
