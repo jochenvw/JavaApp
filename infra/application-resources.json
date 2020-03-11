@@ -59,7 +59,7 @@
             "type": "string",
             "defaultValue": ""
         },
-        "incident-management-systen-endpoint": {
+        "incident-management-system-endpoint": {
             "type": "string",
             "defaultValue": "http://www.whatever.com"
         }
@@ -904,7 +904,7 @@
                 "webhookReceivers": [
                     {
                         "name": "incidentnotifier-endpoint",
-                        "serviceUri": "[parameters('incident-management-systen-endpoint')]"
+                        "serviceUri": "[parameters('incident-management-system-endpoint')]"
                     }
                 ]
             }
