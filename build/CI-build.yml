@@ -108,6 +108,7 @@ stages:
         templateLocation: 'Linked artifact'
         csmFile: '$(System.ArtifactsDirectory)/drop/infra/$(armtemplatefile)'
         csmParametersFile: '$(System.ArtifactsDirectory)/drop/infra/$(armtemplateparams)'
+        overrideParameters: '-param $(sensitiveParamValue)'
         deploymentMode: 'Incremental'
         deploymentOutputs: 'resource_outputs'
 
